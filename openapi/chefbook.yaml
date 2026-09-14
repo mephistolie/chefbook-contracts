@@ -789,12 +789,6 @@ paths:
   /v1/collections:
     get:
       description: Get user recipe collections
-      parameters:
-      - description: User ID
-        in: query
-        name: user_id
-        schema:
-          type: string
       responses:
         '200':
           description: OK
@@ -2376,7 +2370,7 @@ paths:
         schema:
           type: string
       - description: Tag groups
-        explode: false
+        explode: true
         in: query
         name: group
         schema:
@@ -5167,25 +5161,30 @@ components:
     TagTagResponse:
       type: object
       properties:
-        tagId:
+        tagId: &id001
           type: string
-        name:
+        name: &id002
           type: string
-        emoji:
-          type: string
-          nullable: true
-        groupId:
+        emoji: &id003
           type: string
           nullable: true
-      required:
+        groupId: &id004
+          type: string
+          nullable: true
+      required: &id005
       - tagId
       - name
     TagTagWithGroupNameResponse:
       type: object
       properties:
+        tagId: *id001
+        name: *id002
+        emoji: *id003
+        groupId: *id004
         groupName:
           type: string
           nullable: true
+      required: *id005
     TagTagsAndGroupsResponse:
       type: object
       properties:
