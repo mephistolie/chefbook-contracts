@@ -1,0 +1,4166 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: support@chefbook.io
+    name: ChefBook API Support
+  description: ChefBook API Server
+  title: ChefBook API
+  version: 0.1.0
+servers:
+- url: /
+  description: Current gateway origin; clients configure their own base URL
+paths:
+  /v1/auth/activate:
+    get:
+      description: Activate profile
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        schema:
+          type: string
+      - description: Activation code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Activate ProfileInfo
+      tags:
+      - auth
+      operationId: activateProfile
+      security: []
+  /v1/auth/google:
+    delete:
+      description: Delete Google connection for profile
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete Google Connection
+      tags:
+      - auth
+      operationId: deleteGoogleConnection
+    post:
+      description: Sign in to profile via Google Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthGoogleOAuthRequest'
+        description: Code
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Sign In Google
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signInGoogle
+      security: []
+    put:
+      description: Connect Google to existing profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthOAuthCodeRequest'
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Connect Google
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: connectGoogle
+  /v1/auth/google/request:
+    get:
+      description: Request Google OAuth link
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkResponse'
+          description: OK
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Request Google OAuth
+      tags:
+      - auth
+      operationId: requestGoogleOAuth
+      security: []
+  /v1/auth/password:
+    patch:
+      description: Reset password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthResetPasswordRequest'
+        description: Code and new password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Reset Password
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: resetPassword
+      security: []
+    post:
+      description: Request password reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequestPasswordResetRequest'
+        description: ProfileInfo identifier
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Request Password Reset
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: requestPasswordReset
+      security: []
+    put:
+      description: Change password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthChangePasswordRequest'
+        description: Code and new password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Change Password
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: changePassword
+  /v1/auth/refresh:
+    post:
+      description: Refresh session to get new tokens pair
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRefreshTokenRequest'
+        description: Refresh token
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Refresh Session
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: refreshSession
+      security: []
+  /v1/auth/sessions:
+    delete:
+      description: End selected sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: End Sessions
+      tags:
+      - auth
+      operationId: endSessions
+    get:
+      description: Get profile active sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AuthSessionResponse'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get Sessions
+      tags:
+      - auth
+      operationId: getSessions
+  /v1/auth/sign-in:
+    post:
+      description: Sign in to profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSignInRequest'
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Sign In
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signIn
+      security: []
+  /v1/auth/sign-out:
+    post:
+      description: Sign out and remove session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRefreshTokenRequest'
+        description: Refresh token
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Sign Out
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signOut
+      security: []
+  /v1/auth/sign-up:
+    post:
+      description: Create new profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSignUpRequest'
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSignUpResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Sign Up
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signUp
+      security: []
+  /v1/auth/username:
+    post:
+      description: Set profile username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthUsernameRequest'
+        description: Username
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set Username
+      tags:
+      - auth
+      - profile
+      x-codegen-request-body-name: input
+      operationId: setUsername
+  /v1/auth/username/{username}:
+    get:
+      description: Check profile username availability
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthCheckUsernameResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Check Username Availability
+      tags:
+      - auth
+      - profile
+      operationId: checkUsernameAvailability
+  /v1/auth/vk:
+    delete:
+      description: Delete VK connection for profile
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete VK Connection
+      tags:
+      - auth
+      operationId: deleteVkConnection
+    post:
+      description: Sign in to profile via VK Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthOAuthCodeRequest'
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokensResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Sign In VK
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signInVk
+      security: []
+    put:
+      description: Connect VK to existing profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthOAuthCodeRequest'
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Connect VK
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: connectVk
+  /v1/auth/vk/request:
+    get:
+      description: Request VK OAuth link
+      parameters:
+      - description: Display
+        in: query
+        name: display
+        schema:
+          type: string
+      - description: Response type
+        in: query
+        name: response_type
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkResponse'
+          description: OK
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Request VK OAuth
+      tags:
+      - auth
+      operationId: requestVkOAuth
+      security: []
+  /v1/collections:
+    get:
+      description: Get user recipe collections
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetCollectionsResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get user collections
+      tags:
+      - collection
+      - recipe
+      operationId: getCollections
+    post:
+      description: Add recipes collection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeAddCollectionRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeAddCollectionResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Add collection
+      tags:
+      - collection
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: addCollection
+  /v1/collections/{collection_id}:
+    delete:
+      description: Delete recipes collection
+      parameters:
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete collection
+      tags:
+      - collection
+      operationId: deleteCollection
+    get:
+      description: Get recipes collection
+      parameters:
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetCollectionResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get collection
+      tags:
+      - collection
+      - recipe
+      operationId: getCollection
+    put:
+      description: Update recipes collection
+      parameters:
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeUpdateCollectionRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Update collection
+      tags:
+      - collection
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: updateCollection
+  /v1/collections/{collection_id}/save:
+    delete:
+      description: Remove collection from recipe book
+      parameters:
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Remove collection from recipe book
+      tags:
+      - collection
+      operationId: removeCollectionFromRecipeBook
+    post:
+      description: Save collection to recipe book
+      parameters:
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Save collection to recipe book
+      tags:
+      - collection
+      operationId: saveCollectionToRecipeBook
+  /v1/encryption/recipes/{recipe_id}:
+    get:
+      description: Get recipe encrypted key
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptionGetEncryptedVaultKeyResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get recipe key
+      tags:
+      - encryption
+      - recipe
+      operationId: getRecipeKey
+    post:
+      description: Set recipe owner key
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionSetRecipeKeyRequest'
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set recipe owner key
+      tags:
+      - encryption
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: setRecipeOwnerKey
+  /v1/encryption/recipes/{recipe_id}/users:
+    get:
+      description: Get recipe key access requests
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/EncryptionRecipeKeyRequestResponse'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get recipe key requests
+      tags:
+      - encryption
+      - recipe
+      operationId: getRecipeKeyRequests
+    post:
+      description: Request recipe key access
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Request recipe key access
+      tags:
+      - encryption
+      - recipe
+      operationId: requestRecipeKeyAccess
+  /v1/encryption/recipes/{recipe_id}/users/{user_id}:
+    delete:
+      description: Delete recipe key
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete recipe key
+      tags:
+      - encryption
+      - recipe
+      operationId: declineRecipeKeyAccess
+    post:
+      description: Set recipe user key
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionSetRecipeKeyRequest'
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set recipe user key
+      tags:
+      - encryption
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: grantRecipeKeyAccess
+  /v1/encryption/vault:
+    delete:
+      description: Delete profile encrypted vault
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionCreateEncryptedVaultRequest'
+        description: Keys
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete encrypted vault
+      tags:
+      - encryption
+      - profile
+      x-codegen-request-body-name: input
+      operationId: deleteEncryptedVault
+    get:
+      description: Get profile  encrypted vault key
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptionGetEncryptedVaultKeyResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get encrypted vault key
+      tags:
+      - encryption
+      - profile
+      operationId: getEncryptedVaultKey
+    post:
+      description: Create profile encrypted vault
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionCreateEncryptedVaultRequest'
+        description: Keys
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create encrypted vault
+      tags:
+      - encryption
+      - profile
+      x-codegen-request-body-name: input
+      operationId: createEncryptedVault
+  /v1/encryption/vault/delete:
+    post:
+      description: Request profile encrypted vault deletion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Request encrypted vault deletion
+      tags:
+      - encryption
+      - profile
+      operationId: requestEncryptedVaultDeletion
+  /v1/profile:
+    get:
+      description: Get profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileProfileResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get profile
+      tags:
+      - profile
+      - auth
+      - user
+      operationId: getProfile
+  /v1/profile/avatar:
+    delete:
+      description: Delete avatar
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete avatar
+      tags:
+      - user
+      - profile
+      operationId: deleteAvatar
+    post:
+      description: Generate signed upload form data and the resulting picture link.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileGenerateAvatarUploadLinkResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Generate avatar upload link
+      tags:
+      - user
+      - profile
+      operationId: generateAvatarUploadLink
+    put:
+      description: Confirm avatar uploading
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileConfirmAvatarUploadingRequest'
+        description: Avatar ID
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Confirm avatar uploading
+      tags:
+      - user
+      - profile
+      x-codegen-request-body-name: input
+      operationId: confirmAvatarUploading
+  /v1/profile/delete:
+    delete:
+      description: Cancel profile deletion request
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Cancel profile deletion
+      tags:
+      - auth
+      - profile
+      operationId: cancelProfileDeletion
+    get:
+      description: Get profile deletion status
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileProfileDeletionStatusResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get profile deletion status
+      tags:
+      - auth
+      - profile
+      operationId: getProfileDeletionStatus
+    post:
+      description: Request profile deletion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileDeleteProfileRequest'
+        description: ProfileInfo password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDeleteProfileResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete profile
+      tags:
+      - auth
+      - profile
+      x-codegen-request-body-name: input
+      operationId: deleteProfile
+  /v1/profile/description:
+    put:
+      description: Set profile description
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileSetDescriptionRequest'
+        description: Description
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set description
+      tags:
+      - user
+      - profile
+      x-codegen-request-body-name: input
+      operationId: setDescription
+  /v1/profile/display-name:
+    put:
+      description: Set profile name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileSetDisplayNameRequest'
+        description: Name
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set name
+      tags:
+      - user
+      - profile
+      x-codegen-request-body-name: input
+      operationId: setDisplayName
+  /v1/profiles/{profile_id}:
+    get:
+      description: Get profile by ID or username
+      parameters:
+      - description: Profile ID or username
+        in: path
+        name: profile_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileProfileResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get profile by ID
+      tags:
+      - profile
+      - auth
+      - user
+      operationId: getPublicProfile
+  /v1/recipes:
+    get:
+      description: Get recipes by query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetRecipesResponseResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get recipes
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: getRecipes
+      parameters:
+      - in: query
+        name: author_id
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: count
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_creation_timestamp
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_rating
+        required: false
+        schema:
+          type: number
+      - in: query
+        name: last_recipe_id
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_update_timestamp
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_votes
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_rating
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_servings
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_rating
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_servings
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: owned
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: recipe_id
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: recipe_language
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: saved
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: search
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: sorting
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: user_language
+        required: false
+        schema:
+          type: string
+    post:
+      description: Create recipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeRecipeInputRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeCreateRecipeResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: createRecipe
+  /v1/recipes/book:
+    get:
+      description: Get user recipe book
+      parameters:
+      - description: User language code
+        in: query
+        name: user_language
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetRecipeBookResponseResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get recipe book
+      tags:
+      - recipe
+      operationId: getRecipeBook
+  /v1/recipes/random:
+    get:
+      description: Get random recipe
+      parameters:
+      - name: language
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+        description: Repeated language values; the first value is also used as the user language by the
+          current gateway.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetRecipeResponseResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get random recipe
+      tags:
+      - recipe
+      operationId: getRandomRecipe
+  /v1/recipes/tags:
+    get:
+      description: Get recipe tags
+      parameters:
+      - description: Language code
+        in: query
+        name: language
+        schema:
+          type: string
+      - description: Tag groups
+        explode: false
+        in: query
+        name: group
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagTagsAndGroupsResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get tags
+      tags:
+      - tag
+      - recipe
+      operationId: getTags
+  /v1/recipes/tags/groups:
+    get:
+      description: Get recipe tag groups
+      parameters:
+      - description: Language code
+        in: query
+        name: language
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get tag groups
+      tags:
+      - tag
+      - recipe
+      operationId: getTagGroups
+  /v1/recipes/tags/{tag_id}:
+    get:
+      description: Get recipe tag
+      parameters:
+      - description: Tag ID
+        in: path
+        name: tag_id
+        required: true
+        schema:
+          type: string
+      - description: Language code
+        in: query
+        name: language
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagTagWithGroupNameResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get tag
+      tags:
+      - tag
+      - recipe
+      operationId: getTag
+  /v1/recipes/{recipe_id}:
+    delete:
+      description: Delete recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete recipe
+      tags:
+      - recipe
+      operationId: deleteRecipe
+    get:
+      description: Get recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: User language code
+        in: query
+        name: userLanguage
+        schema:
+          type: string
+      - description: Translate recipe
+        in: query
+        name: translated
+        schema:
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeGetRecipeResponseResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get recipe
+      tags:
+      - shopping-list
+      operationId: getRecipe
+    put:
+      description: Update recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeRecipeInputRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeUpdateRecipeResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Update recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: updateRecipe
+  /v1/recipes/{recipe_id}/book:
+    post:
+      description: Save recipe to user's recipe book
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Save recipe
+      tags:
+      - recipe
+      operationId: saveRecipeToRecipeBook
+    delete:
+      description: Remove recipe from recipe book
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from recipe book
+      tags:
+      - recipe
+      operationId: removeRecipeFromRecipeBook
+  /v1/recipes/{recipe_id}/collections:
+    put:
+      description: Set recipe collections
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set recipe collections
+      tags:
+      - recipe
+      operationId: setRecipeCollections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeSetRecipeCollectionsRequest'
+  /v1/recipes/{recipe_id}/collections/{collection_id}:
+    delete:
+      description: Remove recipe from collection
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from collection
+      tags:
+      - recipe
+      operationId: removeRecipeFromCollection
+    post:
+      description: Add recipe to collection
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Add recipe to collection
+      tags:
+      - recipe
+      operationId: addRecipeToCollection
+  /v1/recipes/{recipe_id}/favourites:
+    post:
+      description: Add recipe to favourite
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Add recipe to favourite
+      tags:
+      - recipe
+      operationId: saveRecipeToFavourites
+    delete:
+      description: Remove recipe from favourite
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from favourite
+      tags:
+      - recipe
+      operationId: removeRecipeFromFavourites
+  /v1/recipes/{recipe_id}/pictures:
+    post:
+      description: Generate recipe pictures upload links
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeGenerateRecipePicturesUploadLinksRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/RecipeRecipePictureUploadResponse'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Generate recipe pictures upload links
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: generateRecipePicturesUploadLinks
+    put:
+      description: Set recipe pictures
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeSetRecipePicturesRequest'
+        description: Pictures
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeSetRecipePicturesResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set recipe pictures
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: setRecipePictures
+  /v1/recipes/{recipe_id}/rate:
+    post:
+      description: Rate recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Rate recipe
+      tags:
+      - recipe
+      operationId: rateRecipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeRateRecipeRequest'
+  /v1/recipes/{recipe_id}/translations:
+    delete:
+      description: Delete recipe translation
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Recipe ID
+        in: path
+        name: language_code
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete recipe translation
+      tags:
+      - recipe
+      operationId: deleteRecipeTranslation
+    post:
+      description: Translate recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeTranslateRecipeRequest'
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Translate recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: translateRecipe
+  /v1/shopping-lists:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListShoppingListInfoResponse'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+      - shopping-list
+      operationId: getShoppingLists
+    post:
+      description: Create shared shopping list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListCreateSharedShoppingListRequest'
+        description: Params
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListCreateShoppingListResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create shared shopping list
+      tags:
+      - shopping-list
+      x-codegen-request-body-name: input
+      operationId: createSharedShoppingList
+  /v1/shopping-lists/personal:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListGetShoppingListBodyResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+      - shopping-list
+      operationId: getPersonalShoppingList
+  /v1/shopping-lists/{shopping_list_id}:
+    delete:
+      description: Delete shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Delete shared shopping list
+      tags:
+      - shopping-list
+      operationId: deleteSharedShoppingList
+    get:
+      description: Get shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListGetShoppingListBodyResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get shopping list
+      tags:
+      - shopping-list
+      operationId: getShoppingList
+    patch:
+      description: Add new purchases to shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListSetShoppingListRequest'
+        description: Purchases
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListSetShoppingListResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Add to shopping list
+      tags:
+      - shopping-list
+      x-codegen-request-body-name: input
+      operationId: addToShoppingList
+    put:
+      description: Set shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListSetShoppingListRequest'
+        description: Shopping list
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListSetShoppingListResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set shopping list
+      tags:
+      - shopping-list
+      x-codegen-request-body-name: input
+      operationId: setShoppingList
+  /v1/shopping-lists/{shopping_list_id}/link:
+    get:
+      description: Get shared shopping list link
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingListGetShoppingListLinkResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get shared shopping list link
+      tags:
+      - shopping-list
+      operationId: getSharedShoppingListLink
+  /v1/shopping-lists/{shopping_list_id}/name:
+    put:
+      description: Set shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListSetShoppingListNameRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Set shopping list
+      tags:
+      - shopping-list
+      x-codegen-request-body-name: input
+      operationId: setShoppingListName
+  /v1/shopping-lists/{shopping_list_id}/users:
+    get:
+      description: Get shopping list users
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProfileInfo'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get shopping list users
+      tags:
+      - shopping-list
+      operationId: getShoppingListUsers
+    post:
+      description: Join shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListJoinShoppingListRequest'
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Join shared shopping list
+      tags:
+      - shopping-list
+      x-codegen-request-body-name: input
+      operationId: joinShoppingList
+  /v1/shopping-lists/{shopping_list_id}/users/{user_id}:
+    delete:
+      description: Delete user from shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      security:
+      - bearerAuth: []
+      summary: Delete user from shared shopping list
+      tags:
+      - shopping-list
+      operationId: deleteUserFromShoppingList
+  /v1/subscriptions:
+    get:
+      description: Get subscriptions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SubscriptionSubscriptionResponse'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Get subscriptions
+      tags:
+      - subscription
+      operationId: getSubscriptions
+  /v1/subscriptions/google:
+    post:
+      description: Confirm Google subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionConfirmGoogleSubscriptionRequest'
+        description: Purchase IdToken
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Confirm Google subscription
+      tags:
+      - subscription
+      x-codegen-request-body-name: input
+      operationId: confirmGoogleSubscription
+components:
+  schemas:
+    AuthChangePasswordRequest:
+      properties:
+        newPassword:
+          type: string
+        oldPassword:
+          type: string
+      type: object
+    AuthCheckUsernameResponse:
+      properties:
+        available:
+          type: boolean
+      type: object
+    AuthGoogleOAuthRequest:
+      properties:
+        code:
+          type: string
+        idToken:
+          type: string
+        state:
+          type: string
+      type: object
+    AuthOAuthCodeRequest:
+      properties:
+        code:
+          type: string
+        state:
+          type: string
+      type: object
+    AuthRefreshTokenRequest:
+      properties:
+        refreshToken:
+          type: string
+      required:
+      - refreshToken
+      type: object
+    AuthRequestPasswordResetRequest:
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+      type: object
+    AuthResetPasswordRequest:
+      properties:
+        newPassword:
+          type: string
+        resetCode:
+          type: string
+        userId:
+          type: string
+      required:
+      - newPassword
+      - resetCode
+      - userId
+      type: object
+    AuthSessionResponse:
+      properties:
+        accessPoint:
+          type: string
+        accessTime:
+          type: string
+        current:
+          type: boolean
+        id:
+          type: integer
+        ip:
+          type: string
+        location:
+          type: string
+        mobile:
+          type: boolean
+      type: object
+    AuthSignInRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+      type: object
+    AuthSignUpRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        userId:
+          type: string
+      type: object
+    AuthSignUpResponse:
+      properties:
+        activated:
+          type: boolean
+        message:
+          type: string
+        userId:
+          type: string
+      type: object
+    AuthTokensResponse:
+      properties:
+        accessToken:
+          type: string
+        expirationTimestamp:
+          type: string
+        profileDeletionTimestamp:
+          type: string
+        profileId:
+          type: string
+        refreshToken:
+          type: string
+      type: object
+    AuthUsernameRequest:
+      properties:
+        username:
+          type: string
+      type: object
+    EncryptionCreateEncryptedVaultRequest:
+      properties:
+        privateKey:
+          type: string
+        publicKey:
+          type: string
+        salt:
+          type: string
+      type: object
+    EncryptionGetEncryptedVaultKeyResponse:
+      properties:
+        key:
+          type: string
+          nullable: true
+        salt:
+          type: string
+          nullable: true
+      type: object
+    EncryptionRecipeKeyRequestResponse:
+      properties:
+        publicKey:
+          type: string
+        status:
+          type: string
+        userAvatar:
+          type: string
+        userId:
+          type: string
+        userName:
+          type: string
+      type: object
+    EncryptionSetRecipeKeyRequest:
+      properties:
+        key:
+          type: string
+      type: object
+    ErrorResponse:
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      type: object
+    LinkResponse:
+      properties:
+        link:
+          type: string
+      type: object
+    MessageResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    ProfileConfirmAvatarUploadingRequest:
+      properties:
+        avatarLink:
+          type: string
+      required:
+      - avatarLink
+      type: object
+    ProfileDeleteProfileRequest:
+      properties:
+        password:
+          type: string
+        withSharedData:
+          type: boolean
+      type: object
+    ProfileDeleteProfileResponse:
+      properties:
+        deletionTimestamp:
+          type: string
+      type: object
+    ProfileGenerateAvatarUploadLinkResponse:
+      type: object
+      properties:
+        pictureLink:
+          type: string
+        uploadLink:
+          type: string
+        formData:
+          type: object
+          additionalProperties:
+            type: string
+        maxSize:
+          type: integer
+          format: int64
+      required:
+      - pictureLink
+      - uploadLink
+      - formData
+      - maxSize
+    ProfileInfo:
+      properties:
+        avatar:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      type: object
+    ProfileMinInfo:
+      properties:
+        avatar:
+          type: string
+        name:
+          type: string
+      type: object
+    ProfileOAuthResponse:
+      properties:
+        googleId:
+          type: string
+        vkId:
+          type: integer
+      type: object
+    ProfileProfileDeletionStatusResponse:
+      properties:
+        deleted:
+          type: boolean
+        deletionTimestamp:
+          type: string
+      type: object
+    ProfileProfileResponse:
+      properties:
+        avatar:
+          type: string
+        blocked:
+          type: boolean
+        description:
+          type: string
+        displayName:
+          type: string
+        email:
+          type: string
+        oAuth:
+          $ref: '#/components/schemas/ProfileOAuthResponse'
+        profileId:
+          type: string
+        registrationTimestamp:
+          type: string
+        role:
+          type: string
+        subscriptionPlan:
+          type: string
+        username:
+          type: string
+      type: object
+    ProfileSetDescriptionRequest:
+      properties:
+        description:
+          type: string
+      type: object
+    ProfileSetDisplayNameRequest:
+      properties:
+        displayName:
+          type: string
+      type: object
+    RecipeAddCollectionRequest:
+      properties:
+        collectionId:
+          type: string
+        name:
+          type: string
+        visibility:
+          type: string
+      required:
+      - name
+      type: object
+    RecipeAddCollectionResponse:
+      properties:
+        collectionId:
+          type: string
+      required:
+      - collectionId
+      type: object
+    RecipeCollectionInfoResponse:
+      properties:
+        name:
+          type: string
+      required:
+      - name
+      type: object
+    RecipeCollectionResponse:
+      properties:
+        collectionId:
+          type: string
+        contributors:
+          items:
+            $ref: '#/components/schemas/RecipeContributorResponse'
+          type: array
+        name:
+          type: string
+        recipesCount:
+          type: integer
+        visibility:
+          type: string
+      required:
+      - collectionId
+      - name
+      - visibility
+      type: object
+    RecipeContributorResponse:
+      properties:
+        contributorId:
+          type: string
+        role:
+          type: string
+      required:
+      - contributorId
+      - role
+      type: object
+    RecipeCookingItem:
+      properties:
+        id:
+          type: string
+        recipeId:
+          type: string
+        text:
+          type: string
+        time:
+          type: integer
+        type:
+          type: string
+      type: object
+    RecipeCreateRecipeResponse:
+      properties:
+        recipeId:
+          type: string
+        version:
+          type: integer
+      type: object
+    RecipeGenerateRecipePicturesUploadLinksRequest:
+      properties:
+        picturesCount:
+          type: integer
+      required:
+      - picturesCount
+      type: object
+    RecipeGetCollectionResponse:
+      properties:
+        collection:
+          $ref: '#/components/schemas/RecipeCollectionResponse'
+        profilesInfo:
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          type: object
+      required:
+      - collection
+      type: object
+    RecipeGetCollectionsResponse:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeCollectionResponse'
+        profilesInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+      required:
+      - collections
+      - profilesInfo
+    RecipeGetRecipeBookResponseResponse:
+      properties:
+        collections:
+          items:
+            $ref: '#/components/schemas/RecipeCollectionResponse'
+          type: array
+        isEncryptedVaultEnabled:
+          type: boolean
+        profilesInfo:
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          type: object
+        recipes:
+          items:
+            $ref: '#/components/schemas/RecipeRecipeStateResponse'
+          type: array
+        tagGroups:
+          additionalProperties:
+            type: string
+          type: object
+        tags:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeTagResponse'
+          type: object
+      type: object
+    RecipeGetRecipeResponseResponse:
+      properties:
+        collections:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeCollectionInfoResponse'
+          type: object
+        profilesInfo:
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          type: object
+        recipe:
+          $ref: '#/components/schemas/RecipeRecipeResponse'
+        tagGroups:
+          additionalProperties:
+            type: string
+          type: object
+        tags:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeTagResponse'
+          type: object
+      type: object
+    RecipeGetRecipesResponseResponse:
+      properties:
+        collections:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeCollectionInfoResponse'
+          type: object
+        profilesInfo:
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          type: object
+        recipes:
+          items:
+            $ref: '#/components/schemas/RecipeRecipeInfoResponse'
+          type: array
+        tagGroups:
+          additionalProperties:
+            type: string
+          type: object
+        tags:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeTagResponse'
+          type: object
+      type: object
+    RecipeIngredientItem:
+      properties:
+        amount:
+          type: number
+        id:
+          type: string
+        recipeId:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+        unit:
+          type: string
+      type: object
+    RecipeIngredientTranslationRequest:
+      properties:
+        text:
+          type: string
+        unit:
+          type: string
+      required:
+      - text
+      type: object
+    RecipeMacronutrients:
+      properties:
+        carbohydrates:
+          type: integer
+        fats:
+          type: integer
+        protein:
+          type: integer
+      type: object
+    RecipeRateRecipeRequest:
+      type: object
+      properties:
+        score:
+          type: integer
+          format: int32
+          nullable: true
+    RecipeRatingResponse:
+      properties:
+        index:
+          type: number
+        score:
+          type: integer
+        votes:
+          type: integer
+      type: object
+    RecipeRecipeInfoResponse:
+      properties:
+        calories:
+          type: integer
+        collections:
+          items:
+            type: string
+          type: array
+        creationTimestamp:
+          type: string
+        encrypted:
+          type: boolean
+        favourite:
+          type: boolean
+        id:
+          type: string
+        language:
+          type: string
+        name:
+          type: string
+        owned:
+          type: boolean
+        ownerId:
+          type: string
+        preview:
+          type: string
+        rating:
+          $ref: '#/components/schemas/RecipeRatingResponse'
+        saved:
+          type: boolean
+        servings:
+          type: integer
+        tags:
+          items:
+            type: string
+          type: array
+        time:
+          type: integer
+        translations:
+          items:
+            type: string
+          type: array
+        updateTimestamp:
+          type: string
+        version:
+          type: integer
+        visibility:
+          type: string
+      type: object
+    RecipeRecipeInputRequest:
+      properties:
+        calories:
+          type: integer
+        cooking:
+          items:
+            $ref: '#/components/schemas/RecipeCookingItem'
+          type: array
+        description:
+          type: string
+        encrypted:
+          type: boolean
+        ingredients:
+          items:
+            $ref: '#/components/schemas/RecipeIngredientItem'
+          type: array
+        language:
+          type: string
+        macronutrients:
+          $ref: '#/components/schemas/RecipeMacronutrients'
+        name:
+          type: string
+        recipeId:
+          type: string
+        servings:
+          type: integer
+        tags:
+          items:
+            type: string
+          type: array
+        time:
+          type: integer
+        version:
+          type: integer
+        visibility:
+          type: string
+      required:
+      - cooking
+      - ingredients
+      - name
+      type: object
+    RecipeRecipePictureUploadResponse:
+      properties:
+        formData:
+          additionalProperties:
+            type: string
+          type: object
+        maxSize:
+          type: integer
+        pictureLink:
+          type: string
+        uploadLink:
+          type: string
+      type: object
+    RecipeRecipePictures:
+      properties:
+        cooking:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+        preview:
+          type: string
+      type: object
+    RecipeRecipeResponse:
+      properties:
+        calories:
+          type: integer
+        collections:
+          items:
+            type: string
+          type: array
+        cooking:
+          items:
+            $ref: '#/components/schemas/RecipeCookingItem'
+          type: array
+        creationTimestamp:
+          type: string
+        description:
+          type: string
+        encrypted:
+          type: boolean
+        favourite:
+          type: boolean
+        id:
+          type: string
+        ingredients:
+          items:
+            $ref: '#/components/schemas/RecipeIngredientItem'
+          type: array
+        language:
+          type: string
+        macronutrients:
+          $ref: '#/components/schemas/RecipeMacronutrients'
+        name:
+          type: string
+        owned:
+          type: boolean
+        ownerId:
+          type: string
+        pictures:
+          $ref: '#/components/schemas/RecipeRecipePictures'
+        rating:
+          $ref: '#/components/schemas/RecipeRatingResponse'
+        saved:
+          type: boolean
+        servings:
+          type: integer
+        tags:
+          items:
+            type: string
+          type: array
+        time:
+          type: integer
+        translations:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+        updateTimestamp:
+          type: string
+        version:
+          type: integer
+        visibility:
+          type: string
+      type: object
+    RecipeRecipeStateResponse:
+      properties:
+        collections:
+          items:
+            type: string
+          type: array
+        favourite:
+          type: boolean
+        id:
+          type: string
+        rating:
+          $ref: '#/components/schemas/RecipeRatingResponse'
+        tags:
+          items:
+            type: string
+          type: array
+        translations:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+        version:
+          type: integer
+      type: object
+    RecipeSetRecipeCollectionsRequest:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            type: string
+          nullable: true
+    RecipeSetRecipePicturesRequest:
+      properties:
+        pictures:
+          $ref: '#/components/schemas/RecipeRecipePictures'
+        version:
+          type: integer
+      type: object
+    RecipeSetRecipePicturesResponse:
+      properties:
+        pictures:
+          $ref: '#/components/schemas/RecipeRecipePictures'
+        version:
+          type: integer
+      type: object
+    RecipeTagResponse:
+      properties:
+        emoji:
+          type: string
+        groupId:
+          type: string
+        name:
+          type: string
+      type: object
+    RecipeTranslateRecipeRequest:
+      properties:
+        cooking:
+          additionalProperties:
+            type: string
+          type: object
+        description:
+          type: string
+        ingredients:
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeIngredientTranslationRequest'
+          type: object
+        language:
+          type: string
+        name:
+          type: string
+      required:
+      - cooking
+      - ingredients
+      - language
+      - name
+      type: object
+    RecipeUpdateCollectionRequest:
+      properties:
+        name:
+          type: string
+        visibility:
+          type: string
+      required:
+      - name
+      type: object
+    RecipeUpdateRecipeResponse:
+      properties:
+        version:
+          type: integer
+      type: object
+    ShoppingListCreateSharedShoppingListRequest:
+      properties:
+        name:
+          type: string
+        shoppingListId:
+          type: string
+      type: object
+    ShoppingListCreateShoppingListResponse:
+      type: object
+      properties:
+        shoppingListId:
+          type: string
+      required:
+      - shoppingListId
+    ShoppingListGetShoppingListBodyResponse:
+      properties:
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/ProfileInfo'
+        purchases:
+          items:
+            $ref: '#/components/schemas/ShoppingListPurchase'
+          type: array
+        recipeNames:
+          additionalProperties:
+            type: string
+          type: object
+        shoppingListId:
+          type: string
+        type:
+          type: string
+        version:
+          type: integer
+      type: object
+    ShoppingListGetShoppingListLinkResponse:
+      properties:
+        expirationTimestamp:
+          type: string
+        link:
+          type: string
+      type: object
+    ShoppingListJoinShoppingListRequest:
+      properties:
+        key:
+          type: string
+      type: object
+    ShoppingListPurchase:
+      properties:
+        amount:
+          type: number
+        measureUnit:
+          type: string
+        multiplier:
+          type: integer
+        name:
+          type: string
+        purchaseId:
+          type: string
+        purchased:
+          type: boolean
+        recipeId:
+          type: string
+      required:
+      - name
+      - purchaseId
+      type: object
+    ShoppingListSetShoppingListNameRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+    ShoppingListSetShoppingListRequest:
+      properties:
+        lastVersion:
+          type: integer
+        purchases:
+          items:
+            $ref: '#/components/schemas/ShoppingListPurchase'
+          type: array
+      type: object
+    ShoppingListSetShoppingListResponse:
+      properties:
+        version:
+          type: integer
+      type: object
+    ShoppingListShoppingListInfoResponse:
+      properties:
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/ProfileInfo'
+        shoppingListId:
+          type: string
+        type:
+          type: string
+        version:
+          type: integer
+      type: object
+    SubscriptionConfirmGoogleSubscriptionRequest:
+      properties:
+        purchaseToken:
+          type: string
+        subscriptionId:
+          type: string
+      type: object
+    SubscriptionSubscriptionResponse:
+      properties:
+        autoRenew:
+          type: boolean
+        expirationTimestamp:
+          type: string
+        plan:
+          type: string
+        source:
+          type: string
+      type: object
+    TagTagResponse:
+      properties:
+        emoji:
+          type: string
+        groupId:
+          type: string
+        name:
+          type: string
+        tagId:
+          type: string
+      type: object
+    TagTagWithGroupNameResponse:
+      properties:
+        emoji:
+          type: string
+        groupId:
+          type: string
+        groupName:
+          type: string
+        name:
+          type: string
+        tagId:
+          type: string
+      type: object
+    TagTagsAndGroupsResponse:
+      properties:
+        groups:
+          additionalProperties:
+            type: string
+          type: object
+        tags:
+          items:
+            $ref: '#/components/schemas/TagTagResponse'
+          type: array
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-original-swagger-version: '2.0'
