@@ -4225,7 +4225,6 @@ components:
           type: object
           additionalProperties:
             type: string
-          nullable: true
         maxSize:
           type: integer
           format: int64
@@ -4245,6 +4244,8 @@ components:
         avatar:
           type: string
           nullable: true
+      required:
+      - id
     ProfileMinInfo:
       type: object
       properties:
@@ -4310,6 +4311,7 @@ components:
           type: string
       required:
       - blocked
+      - profileId
     ProfileSetDescriptionRequest:
       type: object
       properties:
@@ -4361,7 +4363,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeContributorResponse'
-          nullable: true
         recipesCount:
           type: integer
           format: int32
@@ -4426,7 +4427,6 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          nullable: true
       required:
       - collection
       - profilesInfo
@@ -4437,12 +4437,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeCollectionResponse'
-          nullable: true
         profilesInfo:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          nullable: true
       required:
       - collections
       - profilesInfo
@@ -4453,7 +4451,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeRecipeStateResponse'
-          nullable: true
         tags:
           type: object
           additionalProperties:
@@ -4468,14 +4465,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeCollectionResponse'
-          nullable: true
         isEncryptedVaultEnabled:
           type: boolean
         profilesInfo:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          nullable: true
       required:
       - recipes
       - tags
@@ -4507,7 +4502,6 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          nullable: true
       required:
       - recipe
       - collections
@@ -4521,7 +4515,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeRecipeInfoResponse'
-          nullable: true
         collections:
           type: object
           additionalProperties:
@@ -4541,7 +4534,6 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          nullable: true
       required:
       - recipes
       - collections
@@ -4756,7 +4748,6 @@ components:
           type: object
           additionalProperties:
             type: string
-          nullable: true
         maxSize:
           type: integer
           format: int64
