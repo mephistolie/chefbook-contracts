@@ -4399,6 +4399,9 @@ components:
         recipeId:
           type: string
           nullable: true
+      required:
+      - id
+      - type
     RecipeCreateRecipeResponse:
       type: object
       properties:
@@ -4560,6 +4563,9 @@ components:
         recipeId:
           type: string
           nullable: true
+      required:
+      - id
+      - type
     RecipeIngredientTranslationRequest:
       type: object
       properties:
@@ -4843,12 +4849,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeIngredientItem'
-          nullable: true
         cooking:
           type: array
           items:
             $ref: '#/components/schemas/RecipeCookingItem'
-          nullable: true
         pictures:
           allOf:
           - $ref: '#/components/schemas/RecipeRecipePictures'
@@ -5022,7 +5026,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ShoppingListPurchase'
-          nullable: true
         recipeNames:
           type: object
           additionalProperties:
