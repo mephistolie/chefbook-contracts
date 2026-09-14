@@ -54,21 +54,24 @@ compatibility boundary. Additive changes must preserve released mobile clients.
 Do not remove or make fields mandatory merely because current generated code
 would be easier to use that way.
 
-## Migration status
+## Consumer integration
 
-This is a preliminary contract, not a declaration that all runtime DTOs already
-come from OpenAPI. The existing gateway and mobile adapters still require a
-contract conformance review before switching to generated transport models.
+The gateway generates Go types, a Gin server interface, and route registration
+with oapi-codegen. Its adapters keep service calls and domain mapping in the
+existing handlers. Swagger UI renders the vendored OpenAPI file; Go annotations
+are no longer a second contract source.
 
-The migration corrected known documentation errors: profile and avatar response
-shapes; collection-list envelopes; shopping-list creation and naming; encryption
-key objects; missing rating and collection assignment bodies; recipe search query
-parameters; UUID path parameter types; and recipe book/favourites deletion paths.
-These corrections describe existing handlers and do not deploy API changes.
+The mobile SDK generates Kotlin Multiplatform API calls and transport models
+with OpenAPI Generator. Existing SDK adapters map request models explicitly and
+retain domain/persistence response models. All public API requests use generated
+methods; direct file transfers still use their separate binary transport.
 
-Before declaring a stable contract, verify required/null semantics, error status
-coverage, query serialization, and auth requirements against the gateway and
-mobile consumers. In particular, the legacy gateway conflates current/public
-profile routing, and mobile public-profile requests use a different path. Resolve
-that behavior with a focused provider/consumer change, not by hiding the mismatch
-in generated code.
+The `0.2.0` migration reconciles JSON field names, nullable DTO fields, request
+bodies (including DELETE), repeated query values, and current/public profile
+routing. Consumer regression tests cover Go DTO/schema parity, route protection,
+profile targets, Kotlin serialization, and preservation of the existing token
+refresh plugin. These checks do not replace testing a deployed service end to end.
+
+The gateway consumer documents the discovered mismatches and their fixes in
+`contracts/MIGRATION.md`. Optional legacy properties that also serve local client
+storage are retained in client models; they are not promised by the HTTP contract.
