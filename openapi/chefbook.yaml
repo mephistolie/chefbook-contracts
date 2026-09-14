@@ -5,7 +5,7 @@ info:
     name: ChefBook API Support
   description: ChefBook API Server
   title: ChefBook API
-  version: 0.1.0
+  version: 0.2.0
 servers:
 - url: /
   description: Current gateway origin; clients configure their own base URL
@@ -78,6 +78,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete Google Connection
@@ -152,6 +158,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Connect Google
@@ -283,6 +295,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Change Password
@@ -353,12 +371,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: End Sessions
       tags:
       - auth
       operationId: endSessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
     get:
       description: Get profile active sessions
       responses:
@@ -388,6 +421,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get Sessions
@@ -534,12 +573,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set Username
       tags:
       - auth
-      - profile
       x-codegen-request-body-name: input
       operationId: setUsername
   /v1/auth/username/{username}:
@@ -577,12 +621,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Check Username Availability
       tags:
       - auth
-      - profile
       operationId: checkUsernameAvailability
   /v1/auth/vk:
     delete:
@@ -612,6 +661,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete VK Connection
@@ -686,6 +741,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Connect VK
@@ -753,12 +814,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get user collections
       tags:
       - collection
-      - recipe
       operationId: getCollections
     post:
       description: Add recipes collection
@@ -788,12 +860,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Add collection
       tags:
       - collection
-      - recipe
       x-codegen-request-body-name: input
       operationId: addCollection
   /v1/collections/{collection_id}:
@@ -825,6 +908,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete collection
@@ -859,12 +954,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get collection
       tags:
       - collection
-      - recipe
       operationId: getCollection
     put:
       description: Update recipes collection
@@ -901,12 +1007,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Update collection
       tags:
       - collection
-      - recipe
       x-codegen-request-body-name: input
       operationId: updateCollection
   /v1/collections/{collection_id}/save:
@@ -938,6 +1055,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Remove collection from recipe book
@@ -972,12 +1101,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Save collection to recipe book
       tags:
       - collection
       operationId: saveCollectionToRecipeBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeSaveCollectionToRecipeBookRequest'
   /v1/encryption/recipes/{recipe_id}:
     get:
       description: Get recipe encrypted key
@@ -1007,12 +1154,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get recipe key
       tags:
       - encryption
-      - recipe
       operationId: getRecipeKey
     post:
       description: Set recipe owner key
@@ -1049,12 +1207,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set recipe owner key
       tags:
       - encryption
-      - recipe
       x-codegen-request-body-name: input
       operationId: setRecipeOwnerKey
   /v1/encryption/recipes/{recipe_id}/users:
@@ -1088,12 +1257,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get recipe key requests
       tags:
       - encryption
-      - recipe
       operationId: getRecipeKeyRequests
     post:
       description: Request recipe key access
@@ -1123,12 +1303,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Request recipe key access
       tags:
       - encryption
-      - recipe
       operationId: requestRecipeKeyAccess
   /v1/encryption/recipes/{recipe_id}/users/{user_id}:
     delete:
@@ -1165,12 +1356,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete recipe key
       tags:
       - encryption
-      - recipe
       operationId: declineRecipeKeyAccess
     post:
       description: Set recipe user key
@@ -1213,24 +1415,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set recipe user key
       tags:
       - encryption
-      - recipe
       x-codegen-request-body-name: input
       operationId: grantRecipeKeyAccess
   /v1/encryption/vault:
     delete:
       description: Delete profile encrypted vault
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EncryptionCreateEncryptedVaultRequest'
-        description: Keys
-        required: true
+              $ref: '#/components/schemas/EncryptionDeleteEncryptedVaultRequest'
       responses:
         '200':
           content:
@@ -1250,12 +1462,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete encrypted vault
       tags:
       - encryption
-      - profile
       x-codegen-request-body-name: input
       operationId: deleteEncryptedVault
     get:
@@ -1279,12 +1502,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get encrypted vault key
       tags:
       - encryption
-      - profile
       operationId: getEncryptedVaultKey
     post:
       description: Create profile encrypted vault
@@ -1314,12 +1548,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Create encrypted vault
       tags:
       - encryption
-      - profile
       x-codegen-request-body-name: input
       operationId: createEncryptedVault
   /v1/encryption/vault/delete:
@@ -1344,12 +1589,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Request encrypted vault deletion
       tags:
       - encryption
-      - profile
       operationId: requestEncryptedVaultDeletion
   /v1/profile:
     get:
@@ -1379,13 +1635,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get profile
       tags:
       - profile
-      - auth
-      - user
       operationId: getProfile
   /v1/profile/avatar:
     delete:
@@ -1415,11 +1675,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete avatar
       tags:
-      - user
       - profile
       operationId: deleteAvatar
     post:
@@ -1449,11 +1714,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Generate avatar upload link
       tags:
-      - user
       - profile
       operationId: generateAvatarUploadLink
     put:
@@ -1490,11 +1760,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Confirm avatar uploading
       tags:
-      - user
       - profile
       x-codegen-request-body-name: input
       operationId: confirmAvatarUploading
@@ -1526,11 +1801,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Cancel profile deletion
       tags:
-      - auth
       - profile
       operationId: cancelProfileDeletion
     get:
@@ -1560,11 +1840,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get profile deletion status
       tags:
-      - auth
       - profile
       operationId: getProfileDeletionStatus
     post:
@@ -1601,11 +1886,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete profile
       tags:
-      - auth
       - profile
       x-codegen-request-body-name: input
       operationId: deleteProfile
@@ -1644,11 +1934,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set description
       tags:
-      - user
       - profile
       x-codegen-request-body-name: input
       operationId: setDescription
@@ -1687,11 +1982,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set name
       tags:
-      - user
       - profile
       x-codegen-request-body-name: input
       operationId: setDisplayName
@@ -1730,13 +2030,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get profile by ID
       tags:
       - profile
-      - auth
-      - user
       operationId: getPublicProfile
   /v1/recipes:
     get:
@@ -1760,6 +2064,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get recipes
@@ -1933,6 +2249,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Create recipe
@@ -1944,9 +2272,9 @@ paths:
     get:
       description: Get user recipe book
       parameters:
-      - description: User language code
+      - name: language
         in: query
-        name: user_language
+        required: false
         schema:
           type: string
       responses:
@@ -1968,6 +2296,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get recipe book
@@ -2008,6 +2348,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get random recipe
@@ -2051,12 +2403,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get tags
       tags:
       - tag
-      - recipe
       operationId: getTags
   /v1/recipes/tags/groups:
     get:
@@ -2088,12 +2451,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get tag groups
       tags:
       - tag
-      - recipe
       operationId: getTagGroups
   /v1/recipes/tags/{tag_id}:
     get:
@@ -2129,12 +2503,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get tag
       tags:
       - tag
-      - recipe
       operationId: getTag
   /v1/recipes/{recipe_id}:
     delete:
@@ -2165,6 +2550,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete recipe
@@ -2180,16 +2577,21 @@ paths:
         required: true
         schema:
           type: string
-      - description: User language code
+      - name: language
         in: query
-        name: userLanguage
+        required: false
         schema:
           type: string
-      - description: Translate recipe
+      - name: translated
         in: query
-        name: translated
+        required: false
         schema:
           type: boolean
+      - name: translator_id
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           content:
@@ -2209,11 +2611,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get recipe
       tags:
-      - shopping-list
+      - recipe
       operationId: getRecipe
     put:
       description: Update recipe
@@ -2250,6 +2664,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Update recipe
@@ -2286,6 +2712,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Save recipe
@@ -2320,6 +2758,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Remove recipe from recipe book
@@ -2355,6 +2805,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set recipe collections
@@ -2402,6 +2864,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Remove recipe from collection
@@ -2442,6 +2916,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Add recipe to collection
@@ -2477,6 +2963,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Add recipe to favourite
@@ -2511,6 +3009,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Remove recipe from favourite
@@ -2555,6 +3065,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Generate recipe pictures upload links
@@ -2597,6 +3119,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set recipe pictures
@@ -2633,6 +3167,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Rate recipe
@@ -2646,46 +3192,6 @@ paths:
             schema:
               $ref: '#/components/schemas/RecipeRateRecipeRequest'
   /v1/recipes/{recipe_id}/translations:
-    delete:
-      description: Delete recipe translation
-      parameters:
-      - description: Recipe ID
-        in: path
-        name: recipe_id
-        required: true
-        schema:
-          type: string
-      - description: Recipe ID
-        in: path
-        name: language_code
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
-          description: OK
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Bad Request
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Internal Server Error
-      security:
-      - bearerAuth: []
-      summary: Delete recipe translation
-      tags:
-      - recipe
-      operationId: deleteRecipeTranslation
     post:
       description: Translate recipe
       parameters:
@@ -2721,6 +3227,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Translate recipe
@@ -2728,6 +3246,59 @@ paths:
       - recipe
       x-codegen-request-body-name: input
       operationId: translateRecipe
+  /v1/recipes/{recipe_id}/translations/{language_code}:
+    delete:
+      description: Delete recipe translation
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Recipe ID
+        in: path
+        name: language_code
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Delete recipe translation
+      tags:
+      - recipe
+      operationId: deleteRecipeTranslation
   /v1/shopping-lists:
     get:
       description: Get personal shopping list
@@ -2752,11 +3323,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get personal shopping list
       tags:
-      - shopping-list
+      - shoppingList
       operationId: getShoppingLists
     post:
       description: Create shared shopping list
@@ -2786,11 +3369,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Create shared shopping list
       tags:
-      - shopping-list
+      - shoppingList
       x-codegen-request-body-name: input
       operationId: createSharedShoppingList
   /v1/shopping-lists/personal:
@@ -2815,11 +3410,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get personal shopping list
       tags:
-      - shopping-list
+      - shoppingList
       operationId: getPersonalShoppingList
   /v1/shopping-lists/{shopping_list_id}:
     delete:
@@ -2850,11 +3457,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete shared shopping list
       tags:
-      - shopping-list
+      - shoppingList
       operationId: deleteSharedShoppingList
     get:
       description: Get shopping list
@@ -2884,11 +3503,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get shopping list
       tags:
-      - shopping-list
+      - shoppingList
       operationId: getShoppingList
     patch:
       description: Add new purchases to shopping list
@@ -2925,11 +3556,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Add to shopping list
       tags:
-      - shopping-list
+      - shoppingList
       x-codegen-request-body-name: input
       operationId: addToShoppingList
     put:
@@ -2967,11 +3610,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set shopping list
       tags:
-      - shopping-list
+      - shoppingList
       x-codegen-request-body-name: input
       operationId: setShoppingList
   /v1/shopping-lists/{shopping_list_id}/link:
@@ -3003,11 +3658,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get shared shopping list link
       tags:
-      - shopping-list
+      - shoppingList
       operationId: getSharedShoppingListLink
   /v1/shopping-lists/{shopping_list_id}/name:
     put:
@@ -3044,11 +3711,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Set shopping list
       tags:
-      - shopping-list
+      - shoppingList
       x-codegen-request-body-name: input
       operationId: setShoppingListName
   /v1/shopping-lists/{shopping_list_id}/users:
@@ -3082,11 +3761,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get shopping list users
       tags:
-      - shopping-list
+      - shoppingList
       operationId: getShoppingListUsers
     post:
       description: Join shared shopping list
@@ -3123,11 +3814,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Join shared shopping list
       tags:
-      - shopping-list
+      - shoppingList
       x-codegen-request-body-name: input
       operationId: joinShoppingList
   /v1/shopping-lists/{shopping_list_id}/users/{user_id}:
@@ -3165,11 +3868,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Delete user from shared shopping list
       tags:
-      - shopping-list
+      - shoppingList
       operationId: deleteUserFromShoppingList
   /v1/subscriptions:
     get:
@@ -3195,6 +3910,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Get subscriptions
@@ -3230,6 +3957,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
       - bearerAuth: []
       summary: Confirm Google subscription
@@ -3240,132 +3979,167 @@ paths:
 components:
   schemas:
     AuthChangePasswordRequest:
+      type: object
       properties:
-        newPassword:
-          type: string
         oldPassword:
           type: string
-      type: object
+        newPassword:
+          type: string
     AuthCheckUsernameResponse:
+      type: object
       properties:
         available:
           type: boolean
-      type: object
+      required:
+      - available
     AuthGoogleOAuthRequest:
+      type: object
       properties:
-        code:
-          type: string
         idToken:
           type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
         state:
           type: string
-      type: object
+          nullable: true
     AuthOAuthCodeRequest:
+      type: object
       properties:
         code:
           type: string
         state:
           type: string
-      type: object
     AuthRefreshTokenRequest:
+      type: object
       properties:
         refreshToken:
           type: string
       required:
       - refreshToken
-      type: object
     AuthRequestPasswordResetRequest:
+      type: object
       properties:
         email:
           type: string
         username:
           type: string
-      type: object
     AuthResetPasswordRequest:
+      type: object
       properties:
-        newPassword:
-          type: string
-        resetCode:
-          type: string
         userId:
           type: string
+          format: uuid
+        resetCode:
+          type: string
+        newPassword:
+          type: string
       required:
-      - newPassword
-      - resetCode
       - userId
-      type: object
+      - resetCode
+      - newPassword
     AuthSessionResponse:
+      type: object
       properties:
-        accessPoint:
-          type: string
-        accessTime:
-          type: string
-        current:
-          type: boolean
         id:
           type: integer
+          format: int64
+        current:
+          type: boolean
         ip:
           type: string
-        location:
+        accessPoint:
           type: string
         mobile:
           type: boolean
-      type: object
+        accessTime:
+          type: string
+          format: date-time
+        location:
+          type: string
+      required:
+      - id
+      - current
+      - ip
+      - accessPoint
+      - mobile
+      - accessTime
+      - location
     AuthSignInRequest:
+      type: object
       properties:
         email:
-          type: string
-        password:
           type: string
         username:
           type: string
-      type: object
+        password:
+          type: string
     AuthSignUpRequest:
+      type: object
       properties:
+        userId:
+          type: string
+          format: uuid
+          nullable: true
         email:
           type: string
         password:
           type: string
+    AuthSignUpResponse:
+      type: object
+      properties:
         userId:
           type: string
-      type: object
-    AuthSignUpResponse:
-      properties:
         activated:
           type: boolean
         message:
           type: string
-        userId:
-          type: string
-      type: object
+      required:
+      - userId
+      - activated
     AuthTokensResponse:
+      type: object
       properties:
-        accessToken:
-          type: string
-        expirationTimestamp:
-          type: string
-        profileDeletionTimestamp:
-          type: string
         profileId:
+          type: string
+        accessToken:
           type: string
         refreshToken:
           type: string
-      type: object
+        expirationTimestamp:
+          type: string
+          format: date-time
+        profileDeletionTimestamp:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - profileId
+      - accessToken
+      - refreshToken
+      - expirationTimestamp
     AuthUsernameRequest:
+      type: object
       properties:
         username:
           type: string
-      type: object
     EncryptionCreateEncryptedVaultRequest:
+      type: object
       properties:
-        privateKey:
-          type: string
         publicKey:
+          type: string
+        privateKey:
           type: string
         salt:
           type: string
+    EncryptionDeleteEncryptedVaultRequest:
       type: object
+      properties:
+        deleteCode:
+          type: string
     EncryptionGetEncryptedVaultKeyResponse:
+      type: object
       properties:
         key:
           type: string
@@ -3373,25 +4147,36 @@ components:
         salt:
           type: string
           nullable: true
-      type: object
+      required:
+      - key
+      - salt
     EncryptionRecipeKeyRequestResponse:
+      type: object
       properties:
-        publicKey:
-          type: string
-        status:
-          type: string
-        userAvatar:
-          type: string
         userId:
           type: string
         userName:
           type: string
-      type: object
+          nullable: true
+        userAvatar:
+          type: string
+          nullable: true
+        status:
+          type: string
+        publicKey:
+          type: string
+          nullable: true
+      required:
+      - userId
+      - userName
+      - userAvatar
+      - status
+      - publicKey
     EncryptionSetRecipeKeyRequest:
+      type: object
       properties:
         key:
           type: string
-      type: object
     ErrorResponse:
       properties:
         error:
@@ -3400,34 +4185,41 @@ components:
           type: string
       type: object
     LinkResponse:
+      type: object
       properties:
         link:
           type: string
-      type: object
+      required:
+      - link
     MessageResponse:
+      type: object
       properties:
         message:
           type: string
-      type: object
+      required:
+      - message
     ProfileConfirmAvatarUploadingRequest:
+      type: object
       properties:
         avatarLink:
           type: string
       required:
       - avatarLink
-      type: object
     ProfileDeleteProfileRequest:
+      type: object
       properties:
         password:
           type: string
         withSharedData:
           type: boolean
-      type: object
     ProfileDeleteProfileResponse:
+      type: object
       properties:
         deletionTimestamp:
           type: string
-      type: object
+          format: date-time
+      required:
+      - deletionTimestamp
     ProfileGenerateAvatarUploadLinkResponse:
       type: object
       properties:
@@ -3439,6 +4231,7 @@ components:
           type: object
           additionalProperties:
             type: string
+          nullable: true
         maxSize:
           type: integer
           format: int64
@@ -3448,115 +4241,144 @@ components:
       - formData
       - maxSize
     ProfileInfo:
+      type: object
       properties:
-        avatar:
-          type: string
         id:
           type: string
         name:
           type: string
-      type: object
-    ProfileMinInfo:
-      properties:
+          nullable: true
         avatar:
           type: string
+          nullable: true
+    ProfileMinInfo:
+      type: object
+      properties:
         name:
           type: string
-      type: object
+          nullable: true
+        avatar:
+          type: string
+          nullable: true
     ProfileOAuthResponse:
+      type: object
       properties:
         googleId:
           type: string
+          nullable: true
         vkId:
           type: integer
-      type: object
+          format: int64
+          nullable: true
     ProfileProfileDeletionStatusResponse:
+      type: object
       properties:
-        deleted:
-          type: boolean
         deletionTimestamp:
           type: string
-      type: object
-    ProfileProfileResponse:
-      properties:
-        avatar:
-          type: string
-        blocked:
+          format: date-time
+          nullable: true
+        deleted:
           type: boolean
-        description:
-          type: string
-        displayName:
-          type: string
-        email:
-          type: string
-        oAuth:
-          $ref: '#/components/schemas/ProfileOAuthResponse'
+    ProfileProfileResponse:
+      type: object
+      properties:
         profileId:
-          type: string
-        registrationTimestamp:
-          type: string
-        role:
-          type: string
-        subscriptionPlan:
           type: string
         username:
           type: string
-      type: object
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        oAuth:
+          allOf:
+          - $ref: '#/components/schemas/ProfileOAuthResponse'
+          nullable: true
+        blocked:
+          type: boolean
+        registrationTimestamp:
+          type: string
+          format: date-time
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        avatar:
+          type: string
+          nullable: true
+        subscriptionPlan:
+          type: string
+      required:
+      - blocked
     ProfileSetDescriptionRequest:
+      type: object
       properties:
         description:
           type: string
-      type: object
+          nullable: true
     ProfileSetDisplayNameRequest:
+      type: object
       properties:
         displayName:
           type: string
-      type: object
+          nullable: true
     RecipeAddCollectionRequest:
+      type: object
       properties:
         collectionId:
           type: string
+          nullable: true
         name:
           type: string
         visibility:
           type: string
       required:
       - name
-      type: object
     RecipeAddCollectionResponse:
+      type: object
       properties:
         collectionId:
           type: string
       required:
       - collectionId
-      type: object
     RecipeCollectionInfoResponse:
+      type: object
       properties:
         name:
           type: string
       required:
       - name
-      type: object
     RecipeCollectionResponse:
+      type: object
       properties:
         collectionId:
           type: string
-        contributors:
-          items:
-            $ref: '#/components/schemas/RecipeContributorResponse'
-          type: array
         name:
           type: string
-        recipesCount:
-          type: integer
         visibility:
           type: string
+        contributors:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeContributorResponse'
+          nullable: true
+        recipesCount:
+          type: integer
+          format: int32
       required:
       - collectionId
       - name
       - visibility
-      type: object
+      - contributors
+      - recipesCount
     RecipeContributorResponse:
+      type: object
       properties:
         contributorId:
           type: string
@@ -3565,45 +4387,55 @@ components:
       required:
       - contributorId
       - role
-      type: object
     RecipeCookingItem:
+      type: object
       properties:
         id:
           type: string
-        recipeId:
-          type: string
         text:
+          type: string
+          nullable: true
+        type:
           type: string
         time:
           type: integer
-        type:
+          format: int32
+          nullable: true
+        recipeId:
           type: string
-      type: object
+          nullable: true
     RecipeCreateRecipeResponse:
+      type: object
       properties:
         recipeId:
           type: string
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - recipeId
+      - version
     RecipeGenerateRecipePicturesUploadLinksRequest:
+      type: object
       properties:
         picturesCount:
           type: integer
+          format: int32
       required:
       - picturesCount
-      type: object
     RecipeGetCollectionResponse:
+      type: object
       properties:
         collection:
           $ref: '#/components/schemas/RecipeCollectionResponse'
         profilesInfo:
+          type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          type: object
+          nullable: true
       required:
       - collection
-      type: object
+      - profilesInfo
     RecipeGetCollectionsResponse:
       type: object
       properties:
@@ -3611,115 +4443,162 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeCollectionResponse'
+          nullable: true
         profilesInfo:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
+          nullable: true
       required:
       - collections
       - profilesInfo
     RecipeGetRecipeBookResponseResponse:
+      type: object
       properties:
+        recipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeRecipeStateResponse'
+          nullable: true
+        tags:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeTagResponse'
+          nullable: true
+        tagGroups:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
         collections:
+          type: array
           items:
             $ref: '#/components/schemas/RecipeCollectionResponse'
-          type: array
+          nullable: true
         isEncryptedVaultEnabled:
           type: boolean
         profilesInfo:
+          type: object
           additionalProperties:
             $ref: '#/components/schemas/ProfileMinInfo'
-          type: object
-        recipes:
-          items:
-            $ref: '#/components/schemas/RecipeRecipeStateResponse'
-          type: array
-        tagGroups:
-          additionalProperties:
-            type: string
-          type: object
-        tags:
-          additionalProperties:
-            $ref: '#/components/schemas/RecipeTagResponse'
-          type: object
-      type: object
+          nullable: true
+      required:
+      - recipes
+      - tags
+      - tagGroups
+      - collections
+      - isEncryptedVaultEnabled
+      - profilesInfo
     RecipeGetRecipeResponseResponse:
+      type: object
       properties:
-        collections:
-          additionalProperties:
-            $ref: '#/components/schemas/RecipeCollectionInfoResponse'
-          type: object
-        profilesInfo:
-          additionalProperties:
-            $ref: '#/components/schemas/ProfileMinInfo'
-          type: object
         recipe:
           $ref: '#/components/schemas/RecipeRecipeResponse'
-        tagGroups:
-          additionalProperties:
-            type: string
-          type: object
-        tags:
-          additionalProperties:
-            $ref: '#/components/schemas/RecipeTagResponse'
-          type: object
-      type: object
-    RecipeGetRecipesResponseResponse:
-      properties:
         collections:
+          type: object
           additionalProperties:
             $ref: '#/components/schemas/RecipeCollectionInfoResponse'
-          type: object
-        profilesInfo:
-          additionalProperties:
-            $ref: '#/components/schemas/ProfileMinInfo'
-          type: object
-        recipes:
-          items:
-            $ref: '#/components/schemas/RecipeRecipeInfoResponse'
-          type: array
-        tagGroups:
-          additionalProperties:
-            type: string
-          type: object
+          nullable: true
         tags:
+          type: object
           additionalProperties:
             $ref: '#/components/schemas/RecipeTagResponse'
+          nullable: true
+        tagGroups:
           type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        profilesInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          nullable: true
+      required:
+      - recipe
+      - collections
+      - tags
+      - tagGroups
+      - profilesInfo
+    RecipeGetRecipesResponseResponse:
       type: object
-    RecipeIngredientItem:
       properties:
-        amount:
-          type: number
+        recipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeRecipeInfoResponse'
+          nullable: true
+        collections:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeCollectionInfoResponse'
+          nullable: true
+        tags:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeTagResponse'
+          nullable: true
+        tagGroups:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        profilesInfo:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMinInfo'
+          nullable: true
+      required:
+      - recipes
+      - collections
+      - tags
+      - tagGroups
+      - profilesInfo
+    RecipeIngredientItem:
+      type: object
+      properties:
         id:
           type: string
-        recipeId:
-          type: string
         text:
           type: string
+          nullable: true
         type:
           type: string
+        amount:
+          type: number
+          format: float
+          nullable: true
         unit:
           type: string
-      type: object
+          nullable: true
+        recipeId:
+          type: string
+          nullable: true
     RecipeIngredientTranslationRequest:
+      type: object
       properties:
         text:
           type: string
         unit:
           type: string
+          nullable: true
       required:
       - text
-      type: object
     RecipeMacronutrients:
+      type: object
       properties:
-        carbohydrates:
-          type: integer
-        fats:
-          type: integer
         protein:
           type: integer
-      type: object
+          format: int32
+          nullable: true
+        fats:
+          type: integer
+          format: int32
+          nullable: true
+        carbohydrates:
+          type: integer
+          format: int32
+          nullable: true
     RecipeRateRecipeRequest:
       type: object
       properties:
@@ -3728,216 +4607,319 @@ components:
           format: int32
           nullable: true
     RecipeRatingResponse:
+      type: object
       properties:
         index:
           type: number
+          format: float
         score:
           type: integer
+          format: int32
+          nullable: true
         votes:
           type: integer
-      type: object
+          format: int32
+      required:
+      - index
+      - votes
     RecipeRecipeInfoResponse:
+      type: object
       properties:
-        calories:
-          type: integer
-        collections:
-          items:
-            type: string
-          type: array
-        creationTimestamp:
-          type: string
-        encrypted:
-          type: boolean
-        favourite:
-          type: boolean
         id:
           type: string
-        language:
-          type: string
         name:
+          type: string
+        ownerId:
           type: string
         owned:
           type: boolean
-        ownerId:
-          type: string
-        preview:
-          type: string
-        rating:
-          $ref: '#/components/schemas/RecipeRatingResponse'
         saved:
           type: boolean
-        servings:
-          type: integer
-        tags:
-          items:
-            type: string
-          type: array
-        time:
-          type: integer
-        translations:
-          items:
-            type: string
-          type: array
-        updateTimestamp:
-          type: string
-        version:
-          type: integer
         visibility:
-          type: string
-      type: object
-    RecipeRecipeInputRequest:
-      properties:
-        calories:
-          type: integer
-        cooking:
-          items:
-            $ref: '#/components/schemas/RecipeCookingItem'
-          type: array
-        description:
           type: string
         encrypted:
           type: boolean
-        ingredients:
-          items:
-            $ref: '#/components/schemas/RecipeIngredientItem'
-          type: array
         language:
           type: string
-        macronutrients:
-          $ref: '#/components/schemas/RecipeMacronutrients'
-        name:
-          type: string
-        recipeId:
-          type: string
-        servings:
-          type: integer
-        tags:
+        translations:
+          type: array
           items:
             type: string
-          type: array
-        time:
-          type: integer
+          nullable: true
+        preview:
+          type: string
+          nullable: true
+        creationTimestamp:
+          type: string
+          format: date-time
+        updateTimestamp:
+          type: string
+          format: date-time
         version:
           type: integer
+          format: int32
+        rating:
+          $ref: '#/components/schemas/RecipeRatingResponse'
+        tags:
+          type: array
+          items:
+            type: string
+          nullable: true
+        collections:
+          type: array
+          items:
+            type: string
+          nullable: true
+        favourite:
+          type: boolean
+        servings:
+          type: integer
+          format: int32
+          nullable: true
+        time:
+          type: integer
+          format: int32
+          nullable: true
+        calories:
+          type: integer
+          format: int32
+          nullable: true
+      required:
+      - id
+      - name
+      - ownerId
+      - visibility
+      - language
+      - creationTimestamp
+      - updateTimestamp
+      - version
+      - rating
+    RecipeRecipeInputRequest:
+      type: object
+      properties:
+        recipeId:
+          type: string
+          nullable: true
+        name:
+          type: string
         visibility:
           type: string
-      required:
-      - cooking
-      - ingredients
-      - name
-      type: object
-    RecipeRecipePictureUploadResponse:
-      properties:
-        formData:
-          additionalProperties:
-            type: string
-          type: object
-        maxSize:
+        encrypted:
+          type: boolean
+        language:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        version:
           type: integer
+          format: int32
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+          nullable: true
+        servings:
+          type: integer
+          format: int32
+          nullable: true
+        time:
+          type: integer
+          format: int32
+          nullable: true
+        calories:
+          type: integer
+          format: int32
+          nullable: true
+        macronutrients:
+          allOf:
+          - $ref: '#/components/schemas/RecipeMacronutrients'
+          nullable: true
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeIngredientItem'
+          nullable: true
+        cooking:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeCookingItem'
+          nullable: true
+      required:
+      - name
+      - ingredients
+      - cooking
+    RecipeRecipePictureUploadResponse:
+      type: object
+      properties:
         pictureLink:
           type: string
         uploadLink:
           type: string
-      type: object
-    RecipeRecipePictures:
-      properties:
-        cooking:
-          additionalProperties:
-            items:
-              type: string
-            type: array
+        formData:
           type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        maxSize:
+          type: integer
+          format: int64
+      required:
+      - pictureLink
+      - uploadLink
+      - formData
+      - maxSize
+    RecipeRecipePictures:
+      type: object
+      properties:
         preview:
           type: string
-      type: object
-    RecipeRecipeResponse:
-      properties:
-        calories:
-          type: integer
-        collections:
-          items:
-            type: string
-          type: array
+          nullable: true
         cooking:
-          items:
-            $ref: '#/components/schemas/RecipeCookingItem'
-          type: array
-        creationTimestamp:
-          type: string
-        description:
-          type: string
-        encrypted:
-          type: boolean
-        favourite:
-          type: boolean
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            nullable: true
+          nullable: true
+    RecipeRecipeResponse:
+      type: object
+      properties:
         id:
           type: string
-        ingredients:
-          items:
-            $ref: '#/components/schemas/RecipeIngredientItem'
-          type: array
-        language:
-          type: string
-        macronutrients:
-          $ref: '#/components/schemas/RecipeMacronutrients'
         name:
+          type: string
+        ownerId:
           type: string
         owned:
           type: boolean
-        ownerId:
+        saved:
+          type: boolean
+        visibility:
           type: string
-        pictures:
-          $ref: '#/components/schemas/RecipeRecipePictures'
+        encrypted:
+          type: boolean
+        language:
+          type: string
+        translations:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            nullable: true
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        creationTimestamp:
+          type: string
+          format: date-time
+        updateTimestamp:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int32
         rating:
           $ref: '#/components/schemas/RecipeRatingResponse'
-        saved:
+        tags:
+          type: array
+          items:
+            type: string
+          nullable: true
+        collections:
+          type: array
+          items:
+            type: string
+          nullable: true
+        favourite:
           type: boolean
         servings:
           type: integer
-        tags:
-          items:
-            type: string
-          type: array
+          format: int32
+          nullable: true
         time:
           type: integer
-        translations:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          type: object
-        updateTimestamp:
+          format: int32
+          nullable: true
+        calories:
+          type: integer
+          format: int32
+          nullable: true
+        macronutrients:
+          allOf:
+          - $ref: '#/components/schemas/RecipeMacronutrients'
+          nullable: true
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeIngredientItem'
+          nullable: true
+        cooking:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeCookingItem'
+          nullable: true
+        pictures:
+          allOf:
+          - $ref: '#/components/schemas/RecipeRecipePictures'
+          nullable: true
+      required:
+      - id
+      - name
+      - ownerId
+      - visibility
+      - language
+      - creationTimestamp
+      - updateTimestamp
+      - version
+      - rating
+      - ingredients
+      - cooking
+    RecipeRecipeStateResponse:
+      type: object
+      properties:
+        id:
           type: string
         version:
           type: integer
-        visibility:
-          type: string
-      type: object
-    RecipeRecipeStateResponse:
-      properties:
-        collections:
-          items:
-            type: string
-          type: array
-        favourite:
-          type: boolean
-        id:
-          type: string
+          format: int32
+        translations:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            nullable: true
+          nullable: true
         rating:
           $ref: '#/components/schemas/RecipeRatingResponse'
         tags:
+          type: array
           items:
             type: string
+          nullable: true
+        collections:
           type: array
-        translations:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          type: object
-        version:
-          type: integer
+          items:
+            type: string
+          nullable: true
+        favourite:
+          type: boolean
+      required:
+      - id
+      - version
+      - rating
+    RecipeSaveCollectionToRecipeBookRequest:
       type: object
+      properties:
+        contributorKey:
+          type: string
+          nullable: true
     RecipeSetRecipeCollectionsRequest:
       type: object
       properties:
@@ -3947,51 +4929,67 @@ components:
             type: string
           nullable: true
     RecipeSetRecipePicturesRequest:
+      type: object
       properties:
         pictures:
           $ref: '#/components/schemas/RecipeRecipePictures'
         version:
           type: integer
-      type: object
+          format: int32
+          nullable: true
     RecipeSetRecipePicturesResponse:
+      type: object
       properties:
         pictures:
           $ref: '#/components/schemas/RecipeRecipePictures'
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - pictures
+      - version
     RecipeTagResponse:
+      type: object
       properties:
-        emoji:
-          type: string
-        groupId:
-          type: string
         name:
           type: string
-      type: object
-    RecipeTranslateRecipeRequest:
-      properties:
-        cooking:
-          additionalProperties:
-            type: string
-          type: object
-        description:
+        emoji:
           type: string
-        ingredients:
-          additionalProperties:
-            $ref: '#/components/schemas/RecipeIngredientTranslationRequest'
-          type: object
+          nullable: true
+        groupId:
+          type: string
+          nullable: true
+      required:
+      - name
+      - emoji
+      - groupId
+    RecipeTranslateRecipeRequest:
+      type: object
+      properties:
         language:
           type: string
         name:
           type: string
+        description:
+          type: string
+          nullable: true
+        ingredients:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RecipeIngredientTranslationRequest'
+          nullable: true
+        cooking:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
       required:
-      - cooking
-      - ingredients
       - language
       - name
-      type: object
+      - ingredients
+      - cooking
     RecipeUpdateCollectionRequest:
+      type: object
       properties:
         name:
           type: string
@@ -3999,19 +4997,23 @@ components:
           type: string
       required:
       - name
-      type: object
     RecipeUpdateRecipeResponse:
+      type: object
       properties:
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - version
     ShoppingListCreateSharedShoppingListRequest:
+      type: object
       properties:
-        name:
-          type: string
         shoppingListId:
           type: string
-      type: object
+          nullable: true
+        name:
+          type: string
+          nullable: true
     ShoppingListCreateShoppingListResponse:
       type: object
       properties:
@@ -4020,58 +5022,79 @@ components:
       required:
       - shoppingListId
     ShoppingListGetShoppingListBodyResponse:
+      type: object
       properties:
+        shoppingListId:
+          type: string
         name:
+          type: string
+          nullable: true
+        type:
           type: string
         owner:
           $ref: '#/components/schemas/ProfileInfo'
         purchases:
+          type: array
           items:
             $ref: '#/components/schemas/ShoppingListPurchase'
-          type: array
+          nullable: true
         recipeNames:
+          type: object
           additionalProperties:
             type: string
-          type: object
-        shoppingListId:
-          type: string
-        type:
-          type: string
+          nullable: true
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - shoppingListId
+      - type
+      - owner
+      - purchases
+      - recipeNames
+      - version
     ShoppingListGetShoppingListLinkResponse:
+      type: object
       properties:
-        expirationTimestamp:
-          type: string
         link:
           type: string
-      type: object
+        expirationTimestamp:
+          type: string
+          format: date-time
+      required:
+      - link
+      - expirationTimestamp
     ShoppingListJoinShoppingListRequest:
+      type: object
       properties:
         key:
           type: string
-      type: object
     ShoppingListPurchase:
+      type: object
       properties:
-        amount:
-          type: number
-        measureUnit:
+        purchaseId:
+          type: string
+        name:
           type: string
         multiplier:
           type: integer
-        name:
-          type: string
-        purchaseId:
-          type: string
+          format: int32
+          nullable: true
         purchased:
           type: boolean
+        amount:
+          type: number
+          format: float
+          nullable: true
+        measureUnit:
+          type: string
+          nullable: true
         recipeId:
           type: string
+          nullable: true
       required:
-      - name
       - purchaseId
-      type: object
+      - name
     ShoppingListSetShoppingListNameRequest:
       type: object
       properties:
@@ -4079,85 +5102,105 @@ components:
           type: string
           nullable: true
     ShoppingListSetShoppingListRequest:
+      type: object
       properties:
-        lastVersion:
-          type: integer
         purchases:
+          type: array
           items:
             $ref: '#/components/schemas/ShoppingListPurchase'
-          type: array
-      type: object
+          nullable: true
+        lastVersion:
+          type: integer
+          format: int32
+          nullable: true
     ShoppingListSetShoppingListResponse:
+      type: object
       properties:
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - version
     ShoppingListShoppingListInfoResponse:
+      type: object
       properties:
+        shoppingListId:
+          type: string
         name:
+          type: string
+          nullable: true
+        type:
           type: string
         owner:
           $ref: '#/components/schemas/ProfileInfo'
-        shoppingListId:
-          type: string
-        type:
-          type: string
         version:
           type: integer
-      type: object
+          format: int32
+      required:
+      - shoppingListId
+      - type
+      - owner
+      - version
     SubscriptionConfirmGoogleSubscriptionRequest:
+      type: object
       properties:
-        purchaseToken:
-          type: string
         subscriptionId:
           type: string
-      type: object
-    SubscriptionSubscriptionResponse:
-      properties:
-        autoRenew:
-          type: boolean
-        expirationTimestamp:
+        purchaseToken:
           type: string
+    SubscriptionSubscriptionResponse:
+      type: object
+      properties:
         plan:
           type: string
         source:
           type: string
-      type: object
-    TagTagResponse:
-      properties:
-        emoji:
+          nullable: true
+        expirationTimestamp:
           type: string
-        groupId:
+          format: date-time
+          nullable: true
+        autoRenew:
+          type: boolean
+      required:
+      - plan
+    TagTagResponse:
+      type: object
+      properties:
+        tagId:
           type: string
         name:
           type: string
-        tagId:
-          type: string
-      type: object
-    TagTagWithGroupNameResponse:
-      properties:
         emoji:
           type: string
+          nullable: true
         groupId:
           type: string
+          nullable: true
+      required:
+      - tagId
+      - name
+    TagTagWithGroupNameResponse:
+      type: object
+      properties:
         groupName:
           type: string
-        name:
-          type: string
-        tagId:
-          type: string
-      type: object
+          nullable: true
     TagTagsAndGroupsResponse:
+      type: object
       properties:
-        groups:
-          additionalProperties:
-            type: string
-          type: object
         tags:
+          type: array
           items:
             $ref: '#/components/schemas/TagTagResponse'
-          type: array
-      type: object
+          nullable: true
+        groups:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      required:
+      - tags
   securitySchemes:
     bearerAuth:
       type: http
