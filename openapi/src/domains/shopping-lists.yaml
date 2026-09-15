@@ -1,0 +1,886 @@
+paths:
+  /v1/shopping-lists:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: ../chefbook.yaml#/components/schemas/ShoppingListShoppingListInfoResponse
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+      - shoppingList
+      operationId: getShoppingLists
+    post:
+      description: Create shared shopping list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ShoppingListCreateSharedShoppingListRequest
+        description: Params
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListCreateShoppingListResponse
+          headers:
+            Location:
+              description: URI of the created resource
+              schema:
+                type: string
+                format: uri-reference
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Create shared shopping list
+      tags:
+      - shoppingList
+      x-codegen-request-body-name: input
+      operationId: createSharedShoppingList
+  /v1/shopping-lists/personal:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListGetShoppingListBodyResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+      - shoppingList
+      operationId: getPersonalShoppingList
+  /v1/shopping-lists/{shopping_list_id}:
+    delete:
+      description: Delete shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete shared shopping list
+      tags:
+      - shoppingList
+      operationId: deleteSharedShoppingList
+    get:
+      description: Get shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListGetShoppingListBodyResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get shopping list
+      tags:
+      - shoppingList
+      operationId: getShoppingList
+    patch:
+      description: Add new purchases to shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ShoppingListSetShoppingListRequest
+        description: Purchases
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListSetShoppingListResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Add to shopping list
+      tags:
+      - shoppingList
+      x-codegen-request-body-name: input
+      operationId: addToShoppingList
+    put:
+      description: Set shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ShoppingListSetShoppingListRequest
+        description: Shopping list
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListSetShoppingListResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set shopping list
+      tags:
+      - shoppingList
+      x-codegen-request-body-name: input
+      operationId: setShoppingList
+  /v1/shopping-lists/{shopping_list_id}/link:
+    get:
+      description: Get shared shopping list link
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ShoppingListGetShoppingListLinkResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get shared shopping list link
+      tags:
+      - shoppingList
+      operationId: getSharedShoppingListLink
+  /v1/shopping-lists/{shopping_list_id}/name:
+    put:
+      description: Set shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ShoppingListSetShoppingListNameRequest
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set shopping list
+      tags:
+      - shoppingList
+      x-codegen-request-body-name: input
+      operationId: setShoppingListName
+  /v1/shopping-lists/{shopping_list_id}/users:
+    get:
+      description: Get shopping list users
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: ../chefbook.yaml#/components/schemas/ProfileInfo
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get shopping list users
+      tags:
+      - shoppingList
+      operationId: getShoppingListUsers
+    post:
+      description: Join shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ShoppingListJoinShoppingListRequest
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Join shared shopping list
+      tags:
+      - shoppingList
+      x-codegen-request-body-name: input
+      operationId: joinShoppingList
+  /v1/shopping-lists/{shopping_list_id}/users/{user_id}:
+    delete:
+      description: Delete user from shared shopping list
+      parameters:
+      - description: Shopping list ID
+        in: path
+        name: shopping_list_id
+        required: true
+        schema:
+          type: string
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete user from shared shopping list
+      tags:
+      - shoppingList
+      operationId: deleteUserFromShoppingList
+schemas:
+  ShoppingListCreateSharedShoppingListRequest:
+    type: object
+    properties:
+      shoppingListId:
+        type: string
+        nullable: true
+      name:
+        type: string
+        nullable: true
+  ShoppingListCreateShoppingListResponse:
+    type: object
+    properties:
+      shoppingListId:
+        type: string
+    required:
+    - shoppingListId
+  ShoppingListGetShoppingListBodyResponse:
+    type: object
+    properties:
+      shoppingListId:
+        type: string
+      name:
+        type: string
+        nullable: true
+      type:
+        type: string
+      owner:
+        $ref: ../chefbook.yaml#/components/schemas/ProfileInfo
+      purchases:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/ShoppingListPurchase
+      recipeNames:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      version:
+        type: integer
+        format: int32
+    required:
+    - shoppingListId
+    - type
+    - owner
+    - purchases
+    - recipeNames
+    - version
+  ShoppingListGetShoppingListLinkResponse:
+    type: object
+    properties:
+      link:
+        type: string
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+    - link
+    - expirationTimestamp
+  ShoppingListJoinShoppingListRequest:
+    type: object
+    properties:
+      key:
+        type: string
+  ShoppingListPurchase:
+    type: object
+    properties:
+      purchaseId:
+        type: string
+      name:
+        type: string
+      multiplier:
+        type: integer
+        format: int32
+        nullable: true
+      purchased:
+        type: boolean
+      amount:
+        type: number
+        format: float
+        nullable: true
+      measureUnit:
+        type: string
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+    - purchaseId
+    - name
+  ShoppingListSetShoppingListNameRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        nullable: true
+  ShoppingListSetShoppingListRequest:
+    type: object
+    properties:
+      purchases:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/ShoppingListPurchase
+        nullable: true
+      lastVersion:
+        type: integer
+        format: int32
+        nullable: true
+  ShoppingListSetShoppingListResponse:
+    type: object
+    properties:
+      version:
+        type: integer
+        format: int32
+    required:
+    - version
+  ShoppingListShoppingListInfoResponse:
+    type: object
+    properties:
+      shoppingListId:
+        type: string
+      name:
+        type: string
+        nullable: true
+      type:
+        type: string
+      owner:
+        $ref: ../chefbook.yaml#/components/schemas/ProfileInfo
+      version:
+        type: integer
+        format: int32
+    required:
+    - shoppingListId
+    - type
+    - owner
+    - version

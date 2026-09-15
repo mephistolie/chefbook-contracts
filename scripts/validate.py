@@ -5,6 +5,7 @@ import hashlib
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import urllib.request
 
@@ -22,6 +23,7 @@ def verified(path):
 
 
 def main():
+    subprocess.run([sys.executable, str(ROOT / "scripts/bundle.py"), "--check"], check=True)
     override = os.environ.get("OPENAPI_GENERATOR_JAR")
     jar = Path(override) if override else ROOT / ".cache" / f"openapi-generator-{VERSION}.jar"
     if override and not verified(jar):
@@ -39,10 +41,11 @@ def main():
             download.replace(jar)
         finally:
             download.unlink(missing_ok=True)
-    subprocess.run(
-        ["java", "-jar", str(jar), "validate", "-i", str(ROOT / "openapi/chefbook.yaml")],
-        check=True,
-    )
+    for specification in ("openapi/src/chefbook.yaml", "openapi/chefbook.yaml"):
+        subprocess.run(
+            ["java", "-jar", str(jar), "validate", "-i", str(ROOT / specification)],
+            check=True,
+        )
 
 
 if __name__ == "__main__":

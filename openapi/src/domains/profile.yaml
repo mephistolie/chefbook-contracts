@@ -1,0 +1,709 @@
+paths:
+  /v1/profile:
+    get:
+      description: Get profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ProfileProfileResponse
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get profile
+      tags:
+      - profile
+      operationId: getProfile
+  /v1/profile/avatar:
+    delete:
+      description: Delete avatar
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete avatar
+      tags:
+      - profile
+      operationId: deleteAvatar
+    post:
+      description: Generate signed upload form data and the resulting picture link.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ProfileGenerateAvatarUploadLinkResponse
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Generate avatar upload link
+      tags:
+      - profile
+      operationId: generateAvatarUploadLink
+    put:
+      description: Confirm avatar uploading
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ProfileConfirmAvatarUploadingRequest
+        description: Avatar ID
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Confirm avatar uploading
+      tags:
+      - profile
+      x-codegen-request-body-name: input
+      operationId: confirmAvatarUploading
+  /v1/profile/delete:
+    delete:
+      description: Cancel profile deletion request
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Cancel profile deletion
+      tags:
+      - profile
+      operationId: cancelProfileDeletion
+    get:
+      description: Get profile deletion status
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ProfileProfileDeletionStatusResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get profile deletion status
+      tags:
+      - profile
+      operationId: getProfileDeletionStatus
+    post:
+      description: Request profile deletion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ProfileDeleteProfileRequest
+        description: ProfileInfo password
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ProfileDeleteProfileResponse
+          description: Profile deletion scheduled; deletionTimestamp indicates the
+            planned execution time
+          headers:
+            Location:
+              description: URI for polling profile deletion status
+              schema:
+                type: string
+                format: uri-reference
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete profile
+      tags:
+      - profile
+      x-codegen-request-body-name: input
+      operationId: deleteProfile
+  /v1/profile/description:
+    put:
+      description: Set profile description
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ProfileSetDescriptionRequest
+        description: Description
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set description
+      tags:
+      - profile
+      x-codegen-request-body-name: input
+      operationId: setDescription
+  /v1/profile/display-name:
+    put:
+      description: Set profile name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/ProfileSetDisplayNameRequest
+        description: Name
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set name
+      tags:
+      - profile
+      x-codegen-request-body-name: input
+      operationId: setDisplayName
+  /v1/profiles/{profile_id}:
+    get:
+      description: Get profile by ID or username
+      parameters:
+      - description: Profile ID or username
+        in: path
+        name: profile_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ProfileProfileResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get profile by ID
+      tags:
+      - profile
+      operationId: getPublicProfile
+schemas:
+  ProfileConfirmAvatarUploadingRequest:
+    type: object
+    properties:
+      avatarLink:
+        type: string
+    required:
+    - avatarLink
+  ProfileDeleteProfileRequest:
+    type: object
+    properties:
+      password:
+        type: string
+      withSharedData:
+        type: boolean
+  ProfileDeleteProfileResponse:
+    type: object
+    properties:
+      deletionTimestamp:
+        type: string
+        format: date-time
+    required:
+    - deletionTimestamp
+  ProfileGenerateAvatarUploadLinkResponse:
+    type: object
+    properties:
+      pictureLink:
+        type: string
+      uploadLink:
+        type: string
+      formData:
+        type: object
+        additionalProperties:
+          type: string
+      maxSize:
+        type: integer
+        format: int64
+    required:
+    - pictureLink
+    - uploadLink
+    - formData
+    - maxSize
+  ProfileInfo:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+    required:
+    - id
+  ProfileMinInfo:
+    type: object
+    properties:
+      name:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+  ProfileOAuthResponse:
+    type: object
+    properties:
+      googleId:
+        type: string
+        nullable: true
+      vkId:
+        type: integer
+        format: int64
+        nullable: true
+  ProfileProfileDeletionStatusResponse:
+    type: object
+    properties:
+      deletionTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+      deleted:
+        type: boolean
+  ProfileProfileResponse:
+    type: object
+    properties:
+      profileId:
+        type: string
+      username:
+        type: string
+        nullable: true
+      email:
+        type: string
+        nullable: true
+      role:
+        type: string
+        nullable: true
+      oAuth:
+        allOf:
+        - $ref: ../chefbook.yaml#/components/schemas/ProfileOAuthResponse
+        nullable: true
+      blocked:
+        type: boolean
+      registrationTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+      displayName:
+        type: string
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+      subscriptionPlan:
+        type: string
+    required:
+    - blocked
+    - profileId
+  ProfileSetDescriptionRequest:
+    type: object
+    properties:
+      description:
+        type: string
+        nullable: true
+  ProfileSetDisplayNameRequest:
+    type: object
+    properties:
+      displayName:
+        type: string
+        nullable: true

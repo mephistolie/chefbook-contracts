@@ -1,0 +1,23 @@
+paths: {}
+schemas:
+  ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  LinkResponse:
+    type: object
+    properties:
+      link:
+        type: string
+    required:
+    - link
+  MessageResponse:
+    type: object
+    properties:
+      message:
+        type: string
+    required:
+    - message

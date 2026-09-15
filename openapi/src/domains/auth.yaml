@@ -1,0 +1,1156 @@
+paths:
+  /v1/auth/activate:
+    get:
+      description: Activate profile
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        schema:
+          type: string
+      - description: Activation code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Activate ProfileInfo
+      tags:
+      - auth
+      operationId: activateProfile
+      security: []
+  /v1/auth/google:
+    delete:
+      description: Delete Google connection for profile
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete Google Connection
+      tags:
+      - auth
+      operationId: deleteGoogleConnection
+    post:
+      description: Sign in to profile via Google Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthGoogleOAuthRequest
+        description: Code
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthTokensResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Sign In Google
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signInGoogle
+      security: []
+    put:
+      description: Connect Google to existing profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthOAuthCodeRequest
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Connect Google
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: connectGoogle
+  /v1/auth/google/request:
+    get:
+      description: Request Google OAuth link
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/LinkResponse
+          description: OK
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Request Google OAuth
+      tags:
+      - auth
+      operationId: requestGoogleOAuth
+      security: []
+  /v1/auth/password:
+    patch:
+      description: Reset password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthResetPasswordRequest
+        description: Code and new password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Reset Password
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: resetPassword
+      security: []
+    post:
+      description: Request password reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthRequestPasswordResetRequest
+        description: ProfileInfo identifier
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Request Password Reset
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: requestPasswordReset
+      security: []
+    put:
+      description: Change password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthChangePasswordRequest
+        description: Code and new password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Change Password
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: changePassword
+  /v1/auth/refresh:
+    post:
+      description: Refresh session to get new tokens pair
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthRefreshTokenRequest
+        description: Refresh token
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthTokensResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Refresh Session
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: refreshSession
+      security: []
+  /v1/auth/sessions:
+    delete:
+      description: End selected sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: End Sessions
+      tags:
+      - auth
+      operationId: endSessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+    get:
+      description: Get profile active sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: ../chefbook.yaml#/components/schemas/AuthSessionResponse
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get Sessions
+      tags:
+      - auth
+      operationId: getSessions
+  /v1/auth/sign-in:
+    post:
+      description: Sign in to profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthSignInRequest
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthTokensResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Sign In
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signIn
+      security: []
+  /v1/auth/sign-out:
+    post:
+      description: Sign out and remove session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthRefreshTokenRequest
+        description: Refresh token
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Sign Out
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signOut
+      security: []
+  /v1/auth/sign-up:
+    post:
+      description: Create new profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthSignUpRequest
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthSignUpResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Sign Up
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signUp
+      security: []
+  /v1/auth/username:
+    post:
+      description: Set profile username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthUsernameRequest
+        description: Username
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set Username
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: setUsername
+  /v1/auth/username/{username}:
+    get:
+      description: Check profile username availability
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthCheckUsernameResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Check Username Availability
+      tags:
+      - auth
+      operationId: checkUsernameAvailability
+  /v1/auth/vk:
+    delete:
+      description: Delete VK connection for profile
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete VK Connection
+      tags:
+      - auth
+      operationId: deleteVkConnection
+    post:
+      description: Sign in to profile via VK Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthOAuthCodeRequest
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/AuthTokensResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Sign In VK
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: signInVk
+      security: []
+    put:
+      description: Connect VK to existing profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/AuthOAuthCodeRequest
+        description: Credentials
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Connect VK
+      tags:
+      - auth
+      x-codegen-request-body-name: input
+      operationId: connectVk
+  /v1/auth/vk/request:
+    get:
+      description: Request VK OAuth link
+      parameters:
+      - description: Display
+        in: query
+        name: display
+        schema:
+          type: string
+      - description: Response type
+        in: query
+        name: response_type
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/LinkResponse
+          description: OK
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      summary: Request VK OAuth
+      tags:
+      - auth
+      operationId: requestVkOAuth
+      security: []
+schemas:
+  AuthChangePasswordRequest:
+    type: object
+    properties:
+      oldPassword:
+        type: string
+      newPassword:
+        type: string
+  AuthCheckUsernameResponse:
+    type: object
+    properties:
+      available:
+        type: boolean
+    required:
+    - available
+  AuthGoogleOAuthRequest:
+    type: object
+    properties:
+      idToken:
+        type: string
+        nullable: true
+      code:
+        type: string
+        nullable: true
+      state:
+        type: string
+        nullable: true
+  AuthOAuthCodeRequest:
+    type: object
+    properties:
+      code:
+        type: string
+      state:
+        type: string
+  AuthRefreshTokenRequest:
+    type: object
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+  AuthRequestPasswordResetRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+  AuthResetPasswordRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: uuid
+      resetCode:
+        type: string
+      newPassword:
+        type: string
+    required:
+    - userId
+    - resetCode
+    - newPassword
+  AuthSessionResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      current:
+        type: boolean
+      ip:
+        type: string
+      accessPoint:
+        type: string
+      mobile:
+        type: boolean
+      accessTime:
+        type: string
+        format: date-time
+      location:
+        type: string
+    required:
+    - id
+    - current
+    - ip
+    - accessPoint
+    - mobile
+    - accessTime
+    - location
+  AuthSignInRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+  AuthSignUpRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: uuid
+        nullable: true
+      email:
+        type: string
+      password:
+        type: string
+  AuthSignUpResponse:
+    type: object
+    properties:
+      userId:
+        type: string
+      activated:
+        type: boolean
+      message:
+        type: string
+    required:
+    - userId
+    - activated
+  AuthTokensResponse:
+    type: object
+    properties:
+      profileId:
+        type: string
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+      expirationTimestamp:
+        type: string
+        format: date-time
+      profileDeletionTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+    required:
+    - profileId
+    - accessToken
+    - refreshToken
+    - expirationTimestamp
+  AuthUsernameRequest:
+    type: object
+    properties:
+      username:
+        type: string

@@ -1,0 +1,1962 @@
+paths:
+  /v1/recipes:
+    get:
+      description: Get recipes by query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeGetRecipesResponseResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get recipes
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: getRecipes
+      parameters:
+      - in: query
+        name: author_id
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: count
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_creation_timestamp
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_rating
+        required: false
+        schema:
+          type: number
+      - in: query
+        name: last_recipe_id
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: last_update_timestamp
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: last_votes
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_rating
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_servings
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: max_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_calories
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_rating
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_servings
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: min_time
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: owned
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: recipe_id
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: recipe_language
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: saved
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: search
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: sorting
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+        explode: true
+      - in: query
+        name: user_language
+        required: false
+        schema:
+          type: string
+    post:
+      description: Create recipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeRecipeInputRequest
+        description: Input
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeCreateRecipeResponse
+          description: Created
+          headers:
+            Location:
+              description: URI of the created resource
+              schema:
+                type: string
+                format: uri-reference
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Create recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: createRecipe
+  /v1/recipes/book:
+    get:
+      description: Get user recipe book
+      parameters:
+      - name: language
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeGetRecipeBookResponseResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get recipe book
+      tags:
+      - recipe
+      operationId: getRecipeBook
+  /v1/recipes/random:
+    get:
+      description: Get random recipe
+      parameters:
+      - name: language
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+        description: Repeated language values; the first value is also used as the
+          user language by the current gateway.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeGetRecipeResponseResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get random recipe
+      tags:
+      - recipe
+      operationId: getRandomRecipe
+  /v1/recipes/{recipe_id}:
+    delete:
+      description: Delete recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete recipe
+      tags:
+      - recipe
+      operationId: deleteRecipe
+    get:
+      description: Get recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: translated
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: translator_id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeGetRecipeResponseResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Get recipe
+      tags:
+      - recipe
+      operationId: getRecipe
+    put:
+      description: Update recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeRecipeInputRequest
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeUpdateRecipeResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Update recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: updateRecipe
+  /v1/recipes/{recipe_id}/book:
+    post:
+      description: Save recipe to user's recipe book
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Save recipe
+      tags:
+      - recipe
+      operationId: saveRecipeToRecipeBook
+    delete:
+      description: Remove recipe from recipe book
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from recipe book
+      tags:
+      - recipe
+      operationId: removeRecipeFromRecipeBook
+  /v1/recipes/{recipe_id}/collections:
+    put:
+      description: Set recipe collections
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set recipe collections
+      tags:
+      - recipe
+      operationId: setRecipeCollections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeSetRecipeCollectionsRequest
+  /v1/recipes/{recipe_id}/collections/{collection_id}:
+    delete:
+      description: Remove recipe from collection
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from collection
+      tags:
+      - recipe
+      operationId: removeRecipeFromCollection
+    post:
+      description: Add recipe to collection
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Collection ID
+        in: path
+        name: collection_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Add recipe to collection
+      tags:
+      - recipe
+      operationId: addRecipeToCollection
+  /v1/recipes/{recipe_id}/favourites:
+    post:
+      description: Add recipe to favourite
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Add recipe to favourite
+      tags:
+      - recipe
+      operationId: saveRecipeToFavourites
+    delete:
+      description: Remove recipe from favourite
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Remove recipe from favourite
+      tags:
+      - recipe
+      operationId: removeRecipeFromFavourites
+  /v1/recipes/{recipe_id}/pictures:
+    post:
+      description: Generate recipe pictures upload links
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeGenerateRecipePicturesUploadLinksRequest
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: ../chefbook.yaml#/components/schemas/RecipeRecipePictureUploadResponse
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Generate recipe pictures upload links
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: generateRecipePicturesUploadLinks
+    put:
+      description: Set recipe pictures
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeSetRecipePicturesRequest
+        description: Pictures
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/RecipeSetRecipePicturesResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Set recipe pictures
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: setRecipePictures
+  /v1/recipes/{recipe_id}/rate:
+    post:
+      description: Rate recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Rate recipe
+      tags:
+      - recipe
+      operationId: rateRecipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeRateRecipeRequest
+  /v1/recipes/{recipe_id}/translations:
+    post:
+      description: Translate recipe
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../chefbook.yaml#/components/schemas/RecipeTranslateRecipeRequest
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Translate recipe
+      tags:
+      - recipe
+      x-codegen-request-body-name: input
+      operationId: translateRecipe
+  /v1/recipes/{recipe_id}/translations/{language_code}:
+    delete:
+      description: Delete recipe translation
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: recipe_id
+        required: true
+        schema:
+          type: string
+      - description: Recipe ID
+        in: path
+        name: language_code
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/MessageResponse
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../chefbook.yaml#/components/schemas/ErrorResponse
+      security:
+      - bearerAuth: []
+      summary: Delete recipe translation
+      tags:
+      - recipe
+      operationId: deleteRecipeTranslation
+schemas:
+  RecipeContributorResponse:
+    type: object
+    properties:
+      contributorId:
+        type: string
+      role:
+        type: string
+    required:
+    - contributorId
+    - role
+  RecipeCookingItem:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+        nullable: true
+      type:
+        type: string
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+    - id
+    - type
+  RecipeCreateRecipeResponse:
+    type: object
+    properties:
+      recipeId:
+        type: string
+      version:
+        type: integer
+        format: int32
+    required:
+    - recipeId
+    - version
+  RecipeGenerateRecipePicturesUploadLinksRequest:
+    type: object
+    properties:
+      picturesCount:
+        type: integer
+        format: int32
+    required:
+    - picturesCount
+  RecipeGetRecipeBookResponseResponse:
+    type: object
+    properties:
+      recipes:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeRecipeStateResponse
+      tags:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeTagResponse
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeCollectionResponse
+      isEncryptedVaultEnabled:
+        type: boolean
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/ProfileMinInfo
+    required:
+    - recipes
+    - tags
+    - tagGroups
+    - collections
+    - isEncryptedVaultEnabled
+    - profilesInfo
+  RecipeGetRecipeResponseResponse:
+    type: object
+    properties:
+      recipe:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRecipeResponse
+      collections:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeCollectionInfoResponse
+        nullable: true
+      tags:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeTagResponse
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/ProfileMinInfo
+    required:
+    - recipe
+    - collections
+    - tags
+    - tagGroups
+    - profilesInfo
+  RecipeGetRecipesResponseResponse:
+    type: object
+    properties:
+      recipes:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeRecipeInfoResponse
+      collections:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeCollectionInfoResponse
+        nullable: true
+      tags:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeTagResponse
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/ProfileMinInfo
+    required:
+    - recipes
+    - collections
+    - tags
+    - tagGroups
+    - profilesInfo
+  RecipeIngredientItem:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+        nullable: true
+      type:
+        type: string
+      amount:
+        type: number
+        format: float
+        nullable: true
+      unit:
+        type: string
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+    - id
+    - type
+  RecipeIngredientTranslationRequest:
+    type: object
+    properties:
+      text:
+        type: string
+      unit:
+        type: string
+        nullable: true
+    required:
+    - text
+  RecipeMacronutrients:
+    type: object
+    properties:
+      protein:
+        type: integer
+        format: int32
+        nullable: true
+      fats:
+        type: integer
+        format: int32
+        nullable: true
+      carbohydrates:
+        type: integer
+        format: int32
+        nullable: true
+  RecipeRateRecipeRequest:
+    type: object
+    properties:
+      score:
+        type: integer
+        format: int32
+        nullable: true
+  RecipeRatingResponse:
+    type: object
+    properties:
+      index:
+        type: number
+        format: float
+      score:
+        type: integer
+        format: int32
+        nullable: true
+      votes:
+        type: integer
+        format: int32
+    required:
+    - index
+    - votes
+  RecipeRecipeInfoResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      owned:
+        type: boolean
+      saved:
+        type: boolean
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+      translations:
+        type: array
+        items:
+          type: string
+        nullable: true
+      preview:
+        type: string
+        nullable: true
+      creationTimestamp:
+        type: string
+        format: date-time
+      updateTimestamp:
+        type: string
+        format: date-time
+      version:
+        type: integer
+        format: int32
+      rating:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRatingResponse
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+    required:
+    - id
+    - name
+    - ownerId
+    - visibility
+    - language
+    - creationTimestamp
+    - updateTimestamp
+    - version
+    - rating
+  RecipeRecipeInputRequest:
+    type: object
+    properties:
+      recipeId:
+        type: string
+        nullable: true
+      name:
+        type: string
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      version:
+        type: integer
+        format: int32
+        nullable: true
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+      macronutrients:
+        allOf:
+        - $ref: ../chefbook.yaml#/components/schemas/RecipeMacronutrients
+        nullable: true
+      ingredients:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeIngredientItem
+        nullable: true
+      cooking:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeCookingItem
+        nullable: true
+    required:
+    - name
+    - ingredients
+    - cooking
+  RecipeRecipePictureUploadResponse:
+    type: object
+    properties:
+      pictureLink:
+        type: string
+      uploadLink:
+        type: string
+      formData:
+        type: object
+        additionalProperties:
+          type: string
+      maxSize:
+        type: integer
+        format: int64
+    required:
+    - pictureLink
+    - uploadLink
+    - formData
+    - maxSize
+  RecipeRecipePictures:
+    type: object
+    properties:
+      preview:
+        type: string
+        nullable: true
+      cooking:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+  RecipeRecipeResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      owned:
+        type: boolean
+      saved:
+        type: boolean
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+      translations:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      creationTimestamp:
+        type: string
+        format: date-time
+      updateTimestamp:
+        type: string
+        format: date-time
+      version:
+        type: integer
+        format: int32
+      rating:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRatingResponse
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+      macronutrients:
+        allOf:
+        - $ref: ../chefbook.yaml#/components/schemas/RecipeMacronutrients
+        nullable: true
+      ingredients:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeIngredientItem
+      cooking:
+        type: array
+        items:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeCookingItem
+      pictures:
+        allOf:
+        - $ref: ../chefbook.yaml#/components/schemas/RecipeRecipePictures
+        nullable: true
+    required:
+    - id
+    - name
+    - ownerId
+    - visibility
+    - language
+    - creationTimestamp
+    - updateTimestamp
+    - version
+    - rating
+    - ingredients
+    - cooking
+  RecipeRecipeStateResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      version:
+        type: integer
+        format: int32
+      translations:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+      rating:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRatingResponse
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+    required:
+    - id
+    - version
+    - rating
+  RecipeSetRecipeCollectionsRequest:
+    type: object
+    properties:
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+  RecipeSetRecipePicturesRequest:
+    type: object
+    properties:
+      pictures:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRecipePictures
+      version:
+        type: integer
+        format: int32
+        nullable: true
+  RecipeSetRecipePicturesResponse:
+    type: object
+    properties:
+      pictures:
+        $ref: ../chefbook.yaml#/components/schemas/RecipeRecipePictures
+      version:
+        type: integer
+        format: int32
+    required:
+    - pictures
+    - version
+  RecipeTagResponse:
+    type: object
+    properties:
+      name:
+        type: string
+      emoji:
+        type: string
+        nullable: true
+      groupId:
+        type: string
+        nullable: true
+    required:
+    - name
+    - emoji
+    - groupId
+  RecipeTranslateRecipeRequest:
+    type: object
+    properties:
+      language:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+        nullable: true
+      ingredients:
+        type: object
+        additionalProperties:
+          $ref: ../chefbook.yaml#/components/schemas/RecipeIngredientTranslationRequest
+        nullable: true
+      cooking:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+    required:
+    - language
+    - name
+    - ingredients
+    - cooking
+  RecipeUpdateRecipeResponse:
+    type: object
+    properties:
+      version:
+        type: integer
+        format: int32
+    required:
+    - version
