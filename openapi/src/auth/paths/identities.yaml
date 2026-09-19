@@ -1,0 +1,262 @@
+paths:
+  /v1/account/identities:
+    get:
+      operationId: getIdentities
+      summary: Get linked identities
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List linked identities
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/identities.yaml#/schemas/IdentitiesResponse
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/account/identities/google:
+    post:
+      operationId: linkGoogleIdentity
+      summary: Link a Google identity
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Requires identityLink grant and independent provider ownership
+        proof. Never auto-link matching email. Another account's identity is a conflict.
+        Already same link returns 204.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/identities.yaml#/schemas/LinkGoogleIdentityRequest
+            examples:
+              link:
+                summary: Link Google to this account
+                description: Use this session’s authorization URL callback, plus Bearer
+                  and an identityLink Reauthentication-Token. A native sign-in ID
+                  token cannot substitute for code/state here.
+                value:
+                  code: example-google-code
+                  state: example-google-state
+      responses:
+        '201':
+          description: Link Google identity
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/account/identities/google
+              schema:
+                type: string
+
+        '204':
+          description: This exact identity is already linked.
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    delete:
+      operationId: unlinkGoogleIdentity
+      summary: Unlink a Google identity
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Requires identityUnlink grant. Do not remove the final usable primary
+        sign-in method. No DELETE body.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/account/identities/vk:
+    post:
+      operationId: linkVkIdentity
+      summary: Link a VK identity
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Requires identityLink grant and independent provider ownership
+        proof. Never auto-link matching email. Another account's identity is a conflict.
+        Already same link returns 204.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/identities.yaml#/schemas/LinkVkIdentityRequest
+            examples:
+              link:
+                summary: Link VK to this account
+                description: Use this session’s authorization URL callback, plus Bearer
+                  and an identityLink Reauthentication-Token. A native sign-in ID
+                  token cannot substitute for code/state here.
+                value:
+                  code: example-vk-code
+                  state: example-vk-state
+      responses:
+        '201':
+          description: Link Vk identity
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/account/identities/vk
+              schema:
+                type: string
+
+        '204':
+          description: This exact identity is already linked.
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    delete:
+      operationId: unlinkVkIdentity
+      summary: Unlink a VK identity
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Requires identityUnlink grant. Do not remove the final usable primary
+        sign-in method. No DELETE body.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

@@ -1,0 +1,517 @@
+schemas:
+  StartAuthenticationStepRequest:
+    oneOf:
+      - $ref: authentication-steps.yaml#/schemas/StartRegistrationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartPasswordSetupStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartPasswordVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartEmailVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartTotpVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartBackupCodeVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartGoogleVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartVkVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartPasskeyVerificationStepRequest
+    discriminator:
+      propertyName: type
+      mapping:
+        registration: authentication-steps.yaml#/schemas/StartRegistrationStepRequest
+        passwordSetup: authentication-steps.yaml#/schemas/StartPasswordSetupStepRequest
+        passwordVerification: authentication-steps.yaml#/schemas/StartPasswordVerificationStepRequest
+        emailVerification: authentication-steps.yaml#/schemas/StartEmailVerificationStepRequest
+        totpVerification: authentication-steps.yaml#/schemas/StartTotpVerificationStepRequest
+        backupCodeVerification: authentication-steps.yaml#/schemas/StartBackupCodeVerificationStepRequest
+        googleVerification: authentication-steps.yaml#/schemas/StartGoogleVerificationStepRequest
+        vkVerification: authentication-steps.yaml#/schemas/StartVkVerificationStepRequest
+        passkeyVerification: authentication-steps.yaml#/schemas/StartPasskeyVerificationStepRequest
+    description: Start one advertised step. No registration data, password or proof
+      is accepted here. Starting an email step queues its code; starting OAuth/WebAuthn
+      prepares its ceremony. Starting passwordSetup requires
+      email verification in the same signUp process and no existing account.
+
+  AuthenticationStepOption:
+    oneOf:
+      - $ref: authentication-steps.yaml#/schemas/StartRegistrationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartPasswordSetupStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartPasswordVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartEmailVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartTotpVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/StartBackupCodeVerificationStepRequest
+      - $ref: authentication-steps.yaml#/schemas/GoogleVerificationStepOption
+      - $ref: authentication-steps.yaml#/schemas/VkVerificationStepOption
+      - $ref: authentication-steps.yaml#/schemas/StartPasskeyVerificationStepRequest
+    discriminator:
+      propertyName: type
+      mapping:
+        registration: authentication-steps.yaml#/schemas/StartRegistrationStepRequest
+        passwordSetup: authentication-steps.yaml#/schemas/StartPasswordSetupStepRequest
+        passwordVerification: authentication-steps.yaml#/schemas/StartPasswordVerificationStepRequest
+        emailVerification: authentication-steps.yaml#/schemas/StartEmailVerificationStepRequest
+        totpVerification: authentication-steps.yaml#/schemas/StartTotpVerificationStepRequest
+        backupCodeVerification: authentication-steps.yaml#/schemas/StartBackupCodeVerificationStepRequest
+        googleVerification: authentication-steps.yaml#/schemas/GoogleVerificationStepOption
+        vkVerification: authentication-steps.yaml#/schemas/VkVerificationStepOption
+        passkeyVerification: authentication-steps.yaml#/schemas/StartPasskeyVerificationStepRequest
+    description: A permitted next action. These are alternatives, not a list of independent
+      mandatory factors. Provider options describe a type; the client supplies allowed
+      redirect/credential settings when starting it.
+
+  AuthenticationStep:
+    oneOf:
+      - $ref: authentication-steps.yaml#/schemas/RegistrationStep
+      - $ref: authentication-steps.yaml#/schemas/PasswordSetupStep
+      - $ref: authentication-steps.yaml#/schemas/PasswordVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/EmailVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/TotpVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/BackupCodeVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/GoogleVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/VkVerificationStep
+      - $ref: authentication-steps.yaml#/schemas/PasskeyVerificationStep
+    discriminator:
+      propertyName: type
+      mapping:
+        registration: authentication-steps.yaml#/schemas/RegistrationStep
+        passwordSetup: authentication-steps.yaml#/schemas/PasswordSetupStep
+        passwordVerification: authentication-steps.yaml#/schemas/PasswordVerificationStep
+        emailVerification: authentication-steps.yaml#/schemas/EmailVerificationStep
+        totpVerification: authentication-steps.yaml#/schemas/TotpVerificationStep
+        backupCodeVerification: authentication-steps.yaml#/schemas/BackupCodeVerificationStep
+        googleVerification: authentication-steps.yaml#/schemas/GoogleVerificationStep
+        vkVerification: authentication-steps.yaml#/schemas/VkVerificationStep
+        passkeyVerification: authentication-steps.yaml#/schemas/PasskeyVerificationStep
+    description: Typed step state, with type-specific fields at the same level as
+      id/type/status. Successful completion is a state transition, not necessarily
+      completion of the whole process. OAuth setup secrets appear only in the creation
+      response, never in GET or authentication.steps.
+
+  StartRegistrationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - registration
+    required:
+      - type
+    additionalProperties: false
+
+  StartPasswordSetupStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passwordSetup
+    required:
+      - type
+    additionalProperties: false
+
+  StartPasswordVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passwordVerification
+    required:
+      - type
+    additionalProperties: false
+
+  StartEmailVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - emailVerification
+    required:
+      - type
+    additionalProperties: false
+
+  StartTotpVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - totpVerification
+    required:
+      - type
+    additionalProperties: false
+
+  StartBackupCodeVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - backupCodeVerification
+    required:
+      - type
+    additionalProperties: false
+
+  GoogleVerificationStepOption:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - googleVerification
+    required:
+      - type
+    additionalProperties: false
+
+  StartGoogleVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - googleVerification
+      redirectUri:
+        type: string
+        format: uri
+      credentialType:
+        type: string
+        enum:
+          - authorizationCode
+          - idToken
+        default: authorizationCode
+    required:
+      - type
+    additionalProperties: false
+    oneOf:
+      - properties:
+          credentialType:
+            type: string
+            enum:
+              - authorizationCode
+        required:
+          - redirectUri
+      - properties:
+          credentialType:
+            type: string
+            enum:
+              - idToken
+        required:
+          - credentialType
+        not:
+          required:
+            - redirectUri
+    description: Authorization code is the default and requires an exact allowlisted
+      redirectUri. Native idToken requires a nonce-capable supported SDK; redirectUri
+      is forbidden for this mode. The server binds the chosen mode to the step.
+
+  VkVerificationStepOption:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - vkVerification
+    required:
+      - type
+    additionalProperties: false
+
+  StartVkVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - vkVerification
+      redirectUri:
+        type: string
+        format: uri
+      credentialType:
+        type: string
+        enum:
+          - authorizationCode
+        default: authorizationCode
+    required:
+      - type
+      - redirectUri
+    additionalProperties: false
+    description: Authorization-code mode only; redirectUri must match an exact allowlist
+      entry. Server-held state and PKCE where supported are required.
+
+  StartPasskeyVerificationStepRequest:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passkeyVerification
+    required:
+      - type
+    additionalProperties: false
+
+  RegistrationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - registration
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+    description: Collect only email. No account lookup result is disclosed. Completing
+      this step fixes the email for this process; changing it requires a new process.
+
+  PasswordSetupStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - passwordSetup
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+    description: Set the first password for a new account after verifying its email
+      in this process. Never reset or modify an existing account through signUp.
+
+  PasswordVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - passwordVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+
+  EmailVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - emailVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+      codeLength:
+        type: integer
+        minimum: 6
+        maximum: 6
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+      - codeLength
+    additionalProperties: false
+
+  TotpVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - totpVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+
+  BackupCodeVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - backupCodeVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+
+  GoogleVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - googleVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+      url:
+        type: string
+        format: uri
+      nonce:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+    description: Creation returns exactly url for authorizationCode or nonce for idToken.
+      Both are omitted on all subsequent reads. The ID-token nonce must be validated
+      inside the provider-signed token, not echoed as a proof.
+    not:
+      required:
+        - url
+        - nonce
+
+  VkVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - vkVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+      url:
+        type: string
+        format: uri
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+    additionalProperties: false
+    description: url is returned only at creation and omitted on subsequent reads.
+
+  PasskeyVerificationStep:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        enum:
+          - passkeyVerification
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+      publicKey:
+        $ref: passkeys.yaml#/schemas/PasskeyRequestOptions
+    required:
+      - id
+      - type
+      - status
+      - expirationTimestamp
+      - publicKey
+    additionalProperties: false

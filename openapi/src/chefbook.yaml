@@ -1,280 +1,219 @@
 openapi: 3.0.3
+
 info:
   contact:
     email: support@chefbook.io
     name: ChefBook API Support
-  description: ChefBook API Server
+  description: ChefBook API for account security, recipes and shared collections.
+    Authentication uses explicit challenges; sessions are issued only after all required
+    checks succeed.
   title: ChefBook API
-  version: 0.2.0
+  version: 0.5.0-draft
+
 servers:
-- url: /
-  description: Current gateway origin; clients configure their own base URL
-paths:
-  /v1/auth/activate:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1activate
-  /v1/auth/google:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1google
-  /v1/auth/google/request:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1google~1request
-  /v1/auth/password:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1password
-  /v1/auth/refresh:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1refresh
-  /v1/auth/sessions:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1sessions
-  /v1/auth/sign-in:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1sign-in
-  /v1/auth/sign-out:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1sign-out
-  /v1/auth/sign-up:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1sign-up
-  /v1/auth/username:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1username
-  /v1/auth/username/{username}:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1username~1{username}
-  /v1/auth/vk:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1vk
-  /v1/auth/vk/request:
-    $ref: ./domains/auth.yaml#/paths/~1v1~1auth~1vk~1request
-  /v1/collections:
-    $ref: ./domains/collections.yaml#/paths/~1v1~1collections
-  /v1/collections/{collection_id}:
-    $ref: ./domains/collections.yaml#/paths/~1v1~1collections~1{collection_id}
-  /v1/collections/{collection_id}/save:
-    $ref: ./domains/collections.yaml#/paths/~1v1~1collections~1{collection_id}~1save
-  /v1/encryption/recipes/{recipe_id}:
-    $ref: ./domains/encryption.yaml#/paths/~1v1~1encryption~1recipes~1{recipe_id}
-  /v1/encryption/recipes/{recipe_id}/users:
-    $ref: ./domains/encryption.yaml#/paths/~1v1~1encryption~1recipes~1{recipe_id}~1users
-  /v1/encryption/recipes/{recipe_id}/users/{user_id}:
-    $ref: ./domains/encryption.yaml#/paths/~1v1~1encryption~1recipes~1{recipe_id}~1users~1{user_id}
-  /v1/encryption/vault:
-    $ref: ./domains/encryption.yaml#/paths/~1v1~1encryption~1vault
-  /v1/encryption/vault/delete:
-    $ref: ./domains/encryption.yaml#/paths/~1v1~1encryption~1vault~1delete
-  /v1/profile:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profile
-  /v1/profile/avatar:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profile~1avatar
-  /v1/profile/delete:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profile~1delete
-  /v1/profile/description:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profile~1description
-  /v1/profile/display-name:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profile~1display-name
-  /v1/profiles/{profile_id}:
-    $ref: ./domains/profile.yaml#/paths/~1v1~1profiles~1{profile_id}
-  /v1/recipes:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes
-  /v1/recipes/book:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1book
-  /v1/recipes/random:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1random
-  /v1/recipes/tags:
-    $ref: ./domains/tags.yaml#/paths/~1v1~1recipes~1tags
-  /v1/recipes/tags/groups:
-    $ref: ./domains/tags.yaml#/paths/~1v1~1recipes~1tags~1groups
-  /v1/recipes/tags/{tag_id}:
-    $ref: ./domains/tags.yaml#/paths/~1v1~1recipes~1tags~1{tag_id}
-  /v1/recipes/{recipe_id}:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}
-  /v1/recipes/{recipe_id}/book:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1book
-  /v1/recipes/{recipe_id}/collections:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1collections
-  /v1/recipes/{recipe_id}/collections/{collection_id}:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1collections~1{collection_id}
-  /v1/recipes/{recipe_id}/favourites:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1favourites
-  /v1/recipes/{recipe_id}/pictures:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1pictures
-  /v1/recipes/{recipe_id}/rate:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1rate
-  /v1/recipes/{recipe_id}/translations:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1translations
-  /v1/recipes/{recipe_id}/translations/{language_code}:
-    $ref: ./domains/recipes.yaml#/paths/~1v1~1recipes~1{recipe_id}~1translations~1{language_code}
-  /v1/shopping-lists:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists
-  /v1/shopping-lists/personal:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1personal
-  /v1/shopping-lists/{shopping_list_id}:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1{shopping_list_id}
-  /v1/shopping-lists/{shopping_list_id}/link:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1{shopping_list_id}~1link
-  /v1/shopping-lists/{shopping_list_id}/name:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1{shopping_list_id}~1name
-  /v1/shopping-lists/{shopping_list_id}/users:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1{shopping_list_id}~1users
-  /v1/shopping-lists/{shopping_list_id}/users/{user_id}:
-    $ref: ./domains/shopping-lists.yaml#/paths/~1v1~1shopping-lists~1{shopping_list_id}~1users~1{user_id}
-  /v1/subscriptions:
-    $ref: ./domains/subscriptions.yaml#/paths/~1v1~1subscriptions
-  /v1/subscriptions/google:
-    $ref: ./domains/subscriptions.yaml#/paths/~1v1~1subscriptions~1google
+  - url: /
+    description: Current gateway origin; clients configure their own base URL
+
+tags:
+  - name: auth
+    x-displayName: Authentication
+  - name: collection
+    x-displayName: Collection
+  - name: recipe
+    x-displayName: Recipe
+  - name: encryption
+    x-displayName: Encryption
+  - name: shoppingList
+    x-displayName: Shopping list
+  - name: subscription
+    x-displayName: Subscription
+  - name: profile
+    x-displayName: Profile
+  - name: tag
+    x-displayName: Tag
+
+x-path-sources:
+  - ./auth/paths/authentications.yaml
+  - ./auth/paths/sessions.yaml
+  - ./auth/paths/usernames.yaml
+  - ./auth/paths/password.yaml
+  - ./auth/paths/email.yaml
+  - ./auth/paths/oauth.yaml
+  - ./auth/paths/identities.yaml
+  - ./auth/paths/totp.yaml
+  - ./auth/paths/passkeys.yaml
+  - ./auth/paths/backup-codes.yaml
+  - ./auth/paths/account.yaml
+  - ./collections/paths.yaml
+  - ./recipes/paths.yaml
+  - ./encryption/paths.yaml
+  - ./shopping-lists/paths.yaml
+  - ./subscriptions/paths.yaml
+  - ./profile/paths.yaml
+  - ./tags/paths.yaml
+
 components:
-  schemas:
-    AuthChangePasswordRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthChangePasswordRequest
-    AuthCheckUsernameResponse:
-      $ref: ./domains/auth.yaml#/schemas/AuthCheckUsernameResponse
-    AuthGoogleOAuthRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthGoogleOAuthRequest
-    AuthOAuthCodeRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthOAuthCodeRequest
-    AuthRefreshTokenRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthRefreshTokenRequest
-    AuthRequestPasswordResetRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthRequestPasswordResetRequest
-    AuthResetPasswordRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthResetPasswordRequest
-    AuthSessionResponse:
-      $ref: ./domains/auth.yaml#/schemas/AuthSessionResponse
-    AuthSignInRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthSignInRequest
-    AuthSignUpRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthSignUpRequest
-    AuthSignUpResponse:
-      $ref: ./domains/auth.yaml#/schemas/AuthSignUpResponse
-    AuthTokensResponse:
-      $ref: ./domains/auth.yaml#/schemas/AuthTokensResponse
-    AuthUsernameRequest:
-      $ref: ./domains/auth.yaml#/schemas/AuthUsernameRequest
-    EncryptionCreateEncryptedVaultRequest:
-      $ref: ./domains/encryption.yaml#/schemas/EncryptionCreateEncryptedVaultRequest
-    EncryptionDeleteEncryptedVaultRequest:
-      $ref: ./domains/encryption.yaml#/schemas/EncryptionDeleteEncryptedVaultRequest
-    EncryptionGetEncryptedVaultKeyResponse:
-      $ref: ./domains/encryption.yaml#/schemas/EncryptionGetEncryptedVaultKeyResponse
-    EncryptionRecipeKeyRequestResponse:
-      $ref: ./domains/encryption.yaml#/schemas/EncryptionRecipeKeyRequestResponse
-    EncryptionSetRecipeKeyRequest:
-      $ref: ./domains/encryption.yaml#/schemas/EncryptionSetRecipeKeyRequest
-    ErrorResponse:
-      $ref: ./domains/common.yaml#/schemas/ErrorResponse
-    LinkResponse:
-      $ref: ./domains/common.yaml#/schemas/LinkResponse
-    MessageResponse:
-      $ref: ./domains/common.yaml#/schemas/MessageResponse
-    ProfileConfirmAvatarUploadingRequest:
-      $ref: ./domains/profile.yaml#/schemas/ProfileConfirmAvatarUploadingRequest
-    ProfileDeleteProfileRequest:
-      $ref: ./domains/profile.yaml#/schemas/ProfileDeleteProfileRequest
-    ProfileDeleteProfileResponse:
-      $ref: ./domains/profile.yaml#/schemas/ProfileDeleteProfileResponse
-    ProfileGenerateAvatarUploadLinkResponse:
-      $ref: ./domains/profile.yaml#/schemas/ProfileGenerateAvatarUploadLinkResponse
-    ProfileInfo:
-      $ref: ./domains/profile.yaml#/schemas/ProfileInfo
-    ProfileMinInfo:
-      $ref: ./domains/profile.yaml#/schemas/ProfileMinInfo
-    ProfileOAuthResponse:
-      $ref: ./domains/profile.yaml#/schemas/ProfileOAuthResponse
-    ProfileProfileDeletionStatusResponse:
-      $ref: ./domains/profile.yaml#/schemas/ProfileProfileDeletionStatusResponse
-    ProfileProfileResponse:
-      $ref: ./domains/profile.yaml#/schemas/ProfileProfileResponse
-    ProfileSetDescriptionRequest:
-      $ref: ./domains/profile.yaml#/schemas/ProfileSetDescriptionRequest
-    ProfileSetDisplayNameRequest:
-      $ref: ./domains/profile.yaml#/schemas/ProfileSetDisplayNameRequest
-    RecipeAddCollectionRequest:
-      $ref: ./domains/collections.yaml#/schemas/RecipeAddCollectionRequest
-    RecipeAddCollectionResponse:
-      $ref: ./domains/collections.yaml#/schemas/RecipeAddCollectionResponse
-    RecipeCollectionInfoResponse:
-      $ref: ./domains/collections.yaml#/schemas/RecipeCollectionInfoResponse
-    RecipeCollectionResponse:
-      $ref: ./domains/collections.yaml#/schemas/RecipeCollectionResponse
-    RecipeContributorResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeContributorResponse
-    RecipeCookingItem:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeCookingItem
-    RecipeCreateRecipeResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeCreateRecipeResponse
-    RecipeGenerateRecipePicturesUploadLinksRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeGenerateRecipePicturesUploadLinksRequest
-    RecipeGetCollectionResponse:
-      $ref: ./domains/collections.yaml#/schemas/RecipeGetCollectionResponse
-    RecipeGetCollectionsResponse:
-      $ref: ./domains/collections.yaml#/schemas/RecipeGetCollectionsResponse
-    RecipeGetRecipeBookResponseResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeGetRecipeBookResponseResponse
-    RecipeGetRecipeResponseResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeGetRecipeResponseResponse
-    RecipeGetRecipesResponseResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeGetRecipesResponseResponse
-    RecipeIngredientItem:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeIngredientItem
-    RecipeIngredientTranslationRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeIngredientTranslationRequest
-    RecipeMacronutrients:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeMacronutrients
-    RecipeRateRecipeRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRateRecipeRequest
-    RecipeRatingResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRatingResponse
-    RecipeRecipeInfoResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipeInfoResponse
-    RecipeRecipeInputRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipeInputRequest
-    RecipeRecipePictureUploadResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipePictureUploadResponse
-    RecipeRecipePictures:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipePictures
-    RecipeRecipeResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipeResponse
-    RecipeRecipeStateResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeRecipeStateResponse
-    RecipeSaveCollectionToRecipeBookRequest:
-      $ref: ./domains/collections.yaml#/schemas/RecipeSaveCollectionToRecipeBookRequest
-    RecipeSetRecipeCollectionsRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeSetRecipeCollectionsRequest
-    RecipeSetRecipePicturesRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeSetRecipePicturesRequest
-    RecipeSetRecipePicturesResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeSetRecipePicturesResponse
-    RecipeTagResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeTagResponse
-    RecipeTranslateRecipeRequest:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeTranslateRecipeRequest
-    RecipeUpdateCollectionRequest:
-      $ref: ./domains/collections.yaml#/schemas/RecipeUpdateCollectionRequest
-    RecipeUpdateRecipeResponse:
-      $ref: ./domains/recipes.yaml#/schemas/RecipeUpdateRecipeResponse
-    ShoppingListCreateSharedShoppingListRequest:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListCreateSharedShoppingListRequest
-    ShoppingListCreateShoppingListResponse:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListCreateShoppingListResponse
-    ShoppingListGetShoppingListBodyResponse:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListGetShoppingListBodyResponse
-    ShoppingListGetShoppingListLinkResponse:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListGetShoppingListLinkResponse
-    ShoppingListJoinShoppingListRequest:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListJoinShoppingListRequest
-    ShoppingListPurchase:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListPurchase
-    ShoppingListSetShoppingListNameRequest:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListSetShoppingListNameRequest
-    ShoppingListSetShoppingListRequest:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListSetShoppingListRequest
-    ShoppingListSetShoppingListResponse:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListSetShoppingListResponse
-    ShoppingListShoppingListInfoResponse:
-      $ref: ./domains/shopping-lists.yaml#/schemas/ShoppingListShoppingListInfoResponse
-    SubscriptionConfirmGoogleSubscriptionRequest:
-      $ref: ./domains/subscriptions.yaml#/schemas/SubscriptionConfirmGoogleSubscriptionRequest
-    SubscriptionSubscriptionResponse:
-      $ref: ./domains/subscriptions.yaml#/schemas/SubscriptionSubscriptionResponse
-    TagTagResponse:
-      $ref: ./domains/tags.yaml#/schemas/TagTagResponse
-    TagTagWithGroupNameResponse:
-      $ref: ./domains/tags.yaml#/schemas/TagTagWithGroupNameResponse
-    TagTagsAndGroupsResponse:
-      $ref: ./domains/tags.yaml#/schemas/TagTagsAndGroupsResponse
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    refreshTokenAuth:
+      type: http
+      scheme: bearer
+      description: Opaque refresh bearer, only DELETE /v1/sessions/{id}; must identify
+        that exact session.
+    flowTokenAuth:
+      type: apiKey
+      in: header
+      name: Flow-Token
+      description: Opaque secret for one authentication flow. Reauthentication additionally
+        requires its original access bearer; IDs are not authorization.
+    reauthenticationAuth:
+      type: apiKey
+      in: header
+      name: Reauthentication-Token
+      description: Short-lived single-use purpose/account/session-bound grant, in
+        addition to access bearer.
+
+  responses:
+    Unauthorized:
+      description: Authentication credentials required by this operation are missing,
+        invalid or expired. For operations with conditional authentication, this response
+        applies only to scenarios requiring credentials.
+      headers:
+        WWW-Authenticate:
+          description: Required on every 401 response from an operation using Bearer
+            authentication. Use the token type required by that operation. Missing
+            credentials receive the bare Bearer challenge; invalid or expired tokens
+            may include error="invalid_token". For conditional authentication this
+            applies only to scenarios requiring credentials.
+          required: true
+          schema:
+            type: string
+          examples:
+            missingCredentials:
+              value: Bearer
+            invalidToken:
+              value: Bearer error="invalid_token"
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    BadRequest:
+      description: The request is malformed or contains an invalid proof. See the
+        operation description and error code for the specific failure.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    Forbidden:
+      description: The operation is not allowed for this account or session, or the
+        required confirmation grant is missing, expired, consumed or bound to another
+        action or session.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    Conflict:
+      description: The requested operation conflicts with the current resource state.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    ServiceUnavailable:
+      description: A required dependency or integration is unavailable. This does
+        not indicate invalid credentials.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    NotFound:
+      description: The resource does not exist or is not accessible to this caller.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+    TooManyRequests:
+      description: The request or attempt limit was reached. Wait at least Retry-After
+        seconds before retrying.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/CacheControlNoStore'
+        Pragma:
+          $ref: '#/components/headers/PragmaNoCache'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/json:
+          schema:
+            $ref: common/schemas.yaml#/schemas/ErrorResponse
+
+  headers:
+    CacheControlNoStore:
+      description: Do not store this response in HTTP caches.
+      required: true
+      schema:
+        type: string
+        enum:
+          - no-store
+      example: no-store
+    PragmaNoCache:
+      description: 'Legacy cache-control compatibility header accompanying Cache-Control:
+        no-store.'
+      required: true
+      schema:
+        type: string
+        enum:
+          - no-cache
+      example: no-cache
+    RetryAfter:
+      description: Minimum delay in seconds before retrying. Retry with backoff; this
+        is not a guarantee of admission after the delay.
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 60
+
 x-original-swagger-version: '2.0'
+
+x-schema-sources:
+  - ./auth/schemas/
+  - ./collections/schemas.yaml
+  - ./recipes/schemas.yaml
+  - ./common/schemas.yaml
+  - ./encryption/schemas.yaml
+  - ./shopping-lists/schemas.yaml
+  - ./subscriptions/schemas.yaml
+  - ./profile/schemas.yaml
+  - ./tags/schemas.yaml

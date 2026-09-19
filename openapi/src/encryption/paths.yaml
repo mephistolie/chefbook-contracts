@@ -1,0 +1,804 @@
+paths:
+  /v1/encryption/recipes/{recipe_id}:
+    get:
+      description: Get recipe encrypted key
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/EncryptedKeyResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get recipe key
+      tags:
+        - encryption
+      operationId: getRecipeKey
+
+    post:
+      description: Set recipe owner key
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SetRecipeKeyRequest
+            examples:
+              encryptedKey:
+                summary: Store a recipient-encrypted recipe key
+                description: 'Structural placeholder: supply the recipe key encrypted
+                  for the intended recipient, never its plaintext.'
+                value:
+                  key: ZXhhbXBsZS1lbmNyeXB0ZWQtcmVjaXBlLWtleQ==
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set recipe owner key
+      tags:
+        - encryption
+      x-codegen-request-body-name: input
+      operationId: setRecipeOwnerKey
+
+  /v1/encryption/recipes/{recipe_id}/users:
+    get:
+      description: Get recipe key access requests
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/RecipeKeyAccessRequestsResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get recipe key requests
+      tags:
+        - encryption
+      operationId: getRecipeKeyRequests
+
+    post:
+      description: Request recipe key access
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Request recipe key access
+      tags:
+        - encryption
+      operationId: requestRecipeKeyAccess
+
+  /v1/encryption/recipes/{recipe_id}/users/{user_id}:
+    post:
+      description: Set recipe user key
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+        - description: User ID
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SetRecipeKeyRequest
+            examples:
+              encryptedKey:
+                summary: Store a recipient-encrypted recipe key
+                description: 'Structural placeholder: supply the recipe key encrypted
+                  for the intended recipient, never its plaintext.'
+                value:
+                  key: ZXhhbXBsZS1lbmNyeXB0ZWQtcmVjaXBlLWtleQ==
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set recipe user key
+      tags:
+        - encryption
+      x-codegen-request-body-name: input
+      operationId: grantRecipeKeyAccess
+
+    delete:
+      description: Delete recipe key
+      parameters:
+        - description: Recipe ID
+          in: path
+          name: recipe_id
+          required: true
+          schema:
+            type: string
+        - description: User ID
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete recipe key
+      tags:
+        - encryption
+      operationId: declineRecipeKeyAccess
+
+  /v1/encryption/vault:
+    get:
+      description: Get profile  encrypted vault key
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/EncryptedKeyResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get encrypted vault key
+      tags:
+        - encryption
+      operationId: getEncryptedVaultKey
+
+    post:
+      description: Create profile encrypted vault
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/CreateEncryptedVaultRequest
+            examples:
+              vault:
+                summary: Create an encrypted vault
+                description: Use actual client-generated key material. privateKey
+                  is already encrypted by the client; values here are base64 placeholders,
+                  not usable keys.
+                value:
+                  publicKey: ZXhhbXBsZS1wdWJsaWMta2V5
+                  privateKey: ZXhhbXBsZS1lbmNyeXB0ZWQtcHJpdmF0ZS1rZXk=
+                  salt: ZXhhbXBsZS1yYW5kb20tc2FsdA==
+        description: Keys
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Create encrypted vault
+      tags:
+        - encryption
+      x-codegen-request-body-name: input
+      operationId: createEncryptedVault
+
+    delete:
+      description: Delete profile encrypted vault
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/ConfirmEncryptedVaultDeletionRequest
+            examples:
+              confirm:
+                summary: Confirm vault deletion
+                description: Use the code from the vault-deletion confirmation flow.
+                value:
+                  deleteCode: example-vault-deletion-code
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete encrypted vault
+      tags:
+        - encryption
+      x-codegen-request-body-name: input
+      operationId: deleteEncryptedVault
+
+  /v1/encryption/vault/delete:
+    post:
+      description: Request profile encrypted vault deletion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Request encrypted vault deletion
+      tags:
+        - encryption
+      operationId: requestEncryptedVaultDeletion

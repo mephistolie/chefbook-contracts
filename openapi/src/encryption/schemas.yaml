@@ -1,0 +1,68 @@
+schemas:
+  CreateEncryptedVaultRequest:
+    type: object
+    properties:
+      publicKey:
+        type: string
+      privateKey:
+        type: string
+      salt:
+        type: string
+
+  ConfirmEncryptedVaultDeletionRequest:
+    type: object
+    properties:
+      deleteCode:
+        type: string
+
+  EncryptedKeyResponse:
+    type: object
+    properties:
+      key:
+        type: string
+        nullable: true
+      salt:
+        type: string
+        nullable: true
+    required:
+      - key
+      - salt
+
+  RecipeKeyAccessRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      userName:
+        type: string
+        nullable: true
+      userAvatar:
+        type: string
+        nullable: true
+      status:
+        type: string
+      publicKey:
+        type: string
+        nullable: true
+    required:
+      - userId
+      - userName
+      - userAvatar
+      - status
+      - publicKey
+
+  SetRecipeKeyRequest:
+    type: object
+    properties:
+      key:
+        type: string
+
+  RecipeKeyAccessRequestsResponse:
+    type: object
+    properties:
+      requests:
+        items:
+          $ref: schemas.yaml#/schemas/RecipeKeyAccessRequest
+        type: array
+    required:
+      - requests

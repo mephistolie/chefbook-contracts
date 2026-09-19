@@ -1,0 +1,45 @@
+schemas:
+  TotpStatusResponse:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+      activationTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+    required:
+      - enabled
+      - activationTimestamp
+    additionalProperties: false
+
+  RequestTotpActivationResponse:
+    type: object
+    properties:
+      secret:
+        type: string
+        minLength: 1
+      otpauthUri:
+        type: string
+        format: uri
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - secret
+      - otpauthUri
+      - expirationTimestamp
+    additionalProperties: false
+
+  ConfirmTotpActivationRequest:
+    type: object
+    properties:
+      code:
+        type: string
+        pattern: ^[0-9]{6}$
+        minLength: 6
+        maxLength: 6
+        writeOnly: true
+    required:
+      - code
+    additionalProperties: false

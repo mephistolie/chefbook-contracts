@@ -1,0 +1,33 @@
+schemas:
+  RequestEmailChangeRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+    required:
+      - email
+    additionalProperties: false
+
+  ConfirmEmailChangeRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - token
+    additionalProperties: false
+
+  ConfirmEmailChangeResponse:
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - pendingNewEmail
+          - changed
+    required:
+      - status
+    additionalProperties: false

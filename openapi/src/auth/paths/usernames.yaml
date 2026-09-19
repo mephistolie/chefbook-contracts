@@ -1,0 +1,97 @@
+paths:
+  /v1/account/username:
+    put:
+      operationId: setUsername
+      summary: Set username
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/usernames.yaml#/schemas/SetUsernameRequest
+            examples:
+              choose:
+                summary: Choose a username
+                value:
+                  username: alexsmith
+              rename:
+                summary: Replace the current username
+                description: Requires the current Bearer session. A name already used
+                  by another account returns 409.
+                value:
+                  username: alexcooks
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/usernames/{username}/availability:
+    get:
+      operationId: checkUsernameAvailability
+      summary: Check username availability
+      description: Check whether a public username is available. Requires an active
+        authenticated account.
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        '200':
+          description: Username availability
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/usernames.yaml#/schemas/UsernameAvailabilityResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

@@ -1,0 +1,234 @@
+paths:
+  /v1/sessions:
+    get:
+      operationId: getSessions
+      summary: Get active sessions
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List own sessions
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/sessions.yaml#/schemas/SessionsResponse
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    post:
+      operationId: createSession
+      summary: Create a session
+      tags:
+        - auth
+      security: []
+      description: Atomically consume signIn/signUp grant and create a full session.
+        Reauthentication grants cannot create sessions. No incomplete registration
+        sessions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/sessions.yaml#/schemas/CreateSessionRequest
+            examples:
+              completedSignIn:
+                summary: Exchange completed sign-in for a session
+                description: Use confirmationToken from the mutation that completed
+                  a signIn flow. This is a one-use grant, not an access token.
+                value:
+                  authenticationToken: example-sign-in-confirmation-token
+              completedSignUp:
+                summary: Exchange completed registration for a session
+                description: All registration steps must succeed first. Use the
+                  signUp confirmationToken; sensitive-action reauthentication grants
+                  cannot create a session.
+                value:
+                  authenticationToken: example-sign-up-confirmation-token
+      responses:
+        '201':
+          description: Create session from completed authentication
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/sessions/{id}
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/sessions.yaml#/schemas/TokensResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    delete:
+      operationId: revokeAllSessions
+      summary: Revoke all sessions
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Revoke all including current. No IDs filter and no DELETE body.
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/sessions/{id}:
+    delete:
+      operationId: revokeSession
+      summary: Revoke session
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+        - refreshTokenAuth: []
+      description: Access bearer may revoke an own session; refresh bearer may only
+        revoke its exact path session. Unknown/revoked well-formed refresh returns
+        204 without effect. An inaccessible session is treated as absent. Missing/malformed
+        bearer is 401. No DELETE body.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/sessions/{id}/tokens:
+    post:
+      operationId: refreshSessionTokens
+      summary: Refresh session tokens
+      tags:
+        - auth
+      security: []
+      description: Refresh token must belong to path id. Atomically rotate once preserving
+        userId/sessionId. Invalid/rotated/expired refresh or mismatch is 400 invalid_refresh_token;
+        no 404. Malformed request must not revoke a session.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/sessions.yaml#/schemas/RefreshSessionTokensRequest
+            examples:
+              rotate:
+                summary: Refresh the current session
+                description: The URL id must identify this refresh token’s session.
+                  Replace the locally stored token pair with the response; do not
+                  reuse the old refresh token.
+                value:
+                  refreshToken: example-current-refresh-token
+      responses:
+        '200':
+          description: Rotate session tokens
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/sessions.yaml#/schemas/TokensResponse
+
+        '400':
+          description: Malformed request or invalid proof. Unrecognized login and
+            wrong password return the same invalid_credentials error without revealing
+            account state.
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                invalidRefreshToken:
+                  value:
+                    error: invalid_refresh_token
+                    message: The refresh token cannot be used
+                invalidRequest:
+                  value:
+                    error: invalid_request
+                    message: Invalid request body
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

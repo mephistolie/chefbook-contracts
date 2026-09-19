@@ -1,0 +1,35 @@
+schemas:
+  ConfirmGoogleSubscriptionRequest:
+    type: object
+    properties:
+      subscriptionId:
+        type: string
+      purchaseToken:
+        type: string
+
+  Subscription:
+    type: object
+    properties:
+      plan:
+        type: string
+      source:
+        type: string
+        nullable: true
+      expirationTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+      autoRenew:
+        type: boolean
+    required:
+      - plan
+
+  SubscriptionsResponse:
+    type: object
+    properties:
+      subscriptions:
+        items:
+          $ref: schemas.yaml#/schemas/Subscription
+        type: array
+    required:
+      - subscriptions

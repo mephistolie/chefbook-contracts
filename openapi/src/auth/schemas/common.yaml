@@ -1,0 +1,27 @@
+schemas:
+  AccountRestriction:
+    oneOf:
+      - $ref: common.yaml#/schemas/PendingDeletionRestriction
+    discriminator:
+      propertyName: type
+      mapping:
+        pendingDeletion: common.yaml#/schemas/PendingDeletionRestriction
+
+  PendingDeletionRestriction:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - pendingDeletion
+      deletionTimestamp:
+        type: string
+        format: date-time
+        description: Scheduled account deletion deadline.
+      deleteSharedData:
+        type: boolean
+        description: Stored content deletion policy at token issuance.
+    required:
+      - type
+      - deletionTimestamp
+      - deleteSharedData

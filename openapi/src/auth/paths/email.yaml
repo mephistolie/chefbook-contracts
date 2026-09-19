@@ -1,0 +1,117 @@
+paths:
+  /v1/account/email/verification:
+    post:
+      operationId: requestEmailChange
+      summary: Request an email change
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Request an email change for the current account. The first message
+        goes to the previous address. A grant for emailChange and the original access
+        session are required. Registration email verification belongs to an authentication
+        challenge.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/email.yaml#/schemas/RequestEmailChangeRequest
+            examples:
+              newEmail:
+                summary: Start changing email
+                description: Send Bearer and an emailChange Reauthentication-Token.
+                  Verify the old email before a confirmation is sent to the new address.
+                value:
+                  email: alex.new@example.com
+      responses:
+        '202':
+          description: Start email change
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/account/email/verification/confirmation:
+    post:
+      operationId: confirmEmailChange
+      summary: Confirm an email change step
+      tags:
+        - auth
+      security: []
+      description: Confirm the step identified by the one-use email token. Confirming
+        the previous address sends a message to the new address and returns pendingNewEmail;
+        it does not change the account email yet. Confirming the new address applies
+        the change and returns changed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/email.yaml#/schemas/ConfirmEmailChangeRequest
+            examples:
+              oldEmail:
+                summary: Confirm the old email
+                description: Use the token from the old address; the result is pendingNewEmail
+                  and the next email is sent to the new address.
+                value:
+                  token: example-oldEmail-change-token
+              newEmail:
+                summary: Confirm the new email
+                description: Use the token from the new address; the result is changed.
+                  The old-address token cannot complete this step.
+                value:
+                  token: example-newEmail-change-token
+      responses:
+        '200':
+          description: Confirm email change stage
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/email.yaml#/schemas/ConfirmEmailChangeResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

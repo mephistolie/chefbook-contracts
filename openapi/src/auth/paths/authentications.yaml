@@ -1,0 +1,746 @@
+paths:
+  /v1/authentications:
+    post:
+      operationId: startAuthentication
+      summary: Start authentication
+      tags:
+        - auth
+      security:
+        - {}
+        - bearerAuth: []
+      description: Start a process with purpose only. signIn/signUp are public; other
+        purposes require the originating access bearer. signUp first offers registration,
+        with no account or session created. Registration data and all credentials
+        arrive through steps. Recent sufficient proof from the same original session
+        may finish reauthentication immediately, without extending evidence freshness.
+        Before proof, responses must not disclose account existence or enrolled factors.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/authentications.yaml#/schemas/StartAuthenticationRequest
+            examples:
+              signIn:
+                summary: Sign in
+                description: Public start. Choose a permitted step from the response;
+                  supply the login only when completing a password step.
+                value:
+                  purpose:
+                    type: signIn
+              passwordChange:
+                summary: 'Reauthenticate: change or set password'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: passwordChange
+              emailChange:
+                summary: 'Reauthenticate: change email'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: emailChange
+              accountDeletion:
+                summary: 'Reauthenticate: schedule account deletion'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: accountDeletion
+              totpEnrollment:
+                summary: 'Reauthenticate: activate TOTP'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: totpEnrollment
+              totpRemoval:
+                summary: 'Reauthenticate: remove TOTP'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: totpRemoval
+              passkeyEnrollment:
+                summary: 'Reauthenticate: register a passkey'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: passkeyEnrollment
+              passkeyRemoval:
+                summary: 'Reauthenticate: remove a passkey'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: passkeyRemoval
+              backupCodesRotation:
+                summary: 'Reauthenticate: replace backup codes'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: backupCodesRotation
+              identityLink:
+                summary: 'Reauthenticate: link an external identity'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: identityLink
+              identityUnlink:
+                summary: 'Reauthenticate: unlink an external identity'
+                description: 'Send Authorization: Bearer with the originating session.
+                  Reuse recent evidence only if accepted by the server; otherwise
+                  complete the offered steps. Use the resulting confirmationToken
+                  for this purpose and session.'
+                value:
+                  purpose:
+                    type: identityUnlink
+              signUp:
+                summary: Start registration without credentials
+                description: Only purpose. Complete registration with an email, then
+                  verify its code in this process before setting a password. Passkeys and
+                  external identities can be added after registration. No username is accepted.
+                value:
+                  purpose:
+                    type: signUp
+      responses:
+        '201':
+          description: Begin authentication
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/authentications/{id}
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/authentications.yaml#/schemas/AuthenticationResponse
+              examples:
+                signUp:
+                  summary: Registration starts without email or credentials
+                  value:
+                    id: 11111111-1111-4111-8111-111111111111
+                    purpose:
+                      type: signUp
+                    status: pending
+                    expirationTimestamp: '2026-09-19T12:15:00Z'
+                    next:
+                      options:
+                        - type: registration
+                    steps: []
+                    flowToken: example-only-flow-token
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/authentications/{id}:
+    get:
+      operationId: getAuthentication
+      summary: Get authentication state
+      tags:
+        - auth
+      security:
+        - flowTokenAuth: []
+        - flowTokenAuth: []
+          bearerAuth: []
+      description: Flow-Token always required. For sensitive purposes also require
+        original access bearer (AND). Invalid flow secrets return 404 without disclosure;
+        missing/invalid required bearer returns 401. GET never returns flowToken/confirmationToken
+        or extends expiry.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Flow-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Secret of this originating flow. Bearer is additionally required
+            for reauthentication.
+      responses:
+        '200':
+          description: Read authentication state
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/authentications.yaml#/schemas/AuthenticationResponse
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/authentications/{id}/steps:
+    post:
+      operationId: startAuthenticationStep
+      summary: Start authentication step
+      tags:
+        - auth
+      security:
+        - flowTokenAuth: []
+        - flowTokenAuth: []
+          bearerAuth: []
+      description: Flow-Token is required; sensitive purposes also require the original
+        access bearer. Only server-advertised next.options are allowed. Starting a
+        registration step does not send email. Starting emailVerification queues a
+        code for both existing and unused addresses with indistinguishable public
+        responses and rate-limit behavior. Resend creates a replacement step and cancels
+        its pending predecessor in this process, without resetting total failed attempts
+        or expiry. 201 acknowledges creation, not email delivery. Password setup
+        for signUp is forbidden until email ownership is verified. Passkeys and
+        external identities can only be added after account creation.
+        Concurrent alternatives must not bypass server policy.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Flow-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Secret of this originating flow. Bearer is additionally required
+            for reauthentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/authentication-steps.yaml#/schemas/StartAuthenticationStepRequest
+            examples:
+              password:
+                summary: Password
+                description: Send Flow-Token; sensitive purposes also require the
+                  original Bearer. Credentials are supplied when completing this step.
+                value:
+                  type: passwordVerification
+              email:
+                summary: Email code
+                description: 'Send Flow-Token; sensitive purposes also require the
+                  original Bearer. Registration only: sends a code to the email from
+                  this flow. Complete it in the same initiating flow; respect Retry-After
+                  when resending.'
+                value:
+                  type: emailVerification
+              totp:
+                summary: TOTP second factor
+                description: Use only when next.options offers totpVerification after
+                  the first factor. Send Flow-Token and, for sensitive purposes, the
+                  original Bearer.
+                value:
+                  type: totpVerification
+              backupCode:
+                summary: Backup code
+                description: Send Flow-Token; sensitive purposes also require the
+                  original Bearer. Use an unused backup code when offered as an alternative
+                  to the second factor.
+                value:
+                  type: backupCodeVerification
+              passkey:
+                summary: Passkey
+                description: Send Flow-Token; sensitive purposes also require the
+                  original Bearer. Pass the returned publicKey options to WebAuthn
+                  or the native passkey API.
+                value:
+                  type: passkeyVerification
+              googleCode:
+                summary: 'Google: authorization code'
+                description: The callback must exactly match the configured allowlist.
+                  Open the returned URL, then submit both code and state. Requires
+                  provider setup.
+                value:
+                  type: googleVerification
+                  credentialType: authorizationCode
+                  redirectUri: https://app.example.com/oauth/google/callback
+              googleDefault:
+                summary: 'Google: default credential type'
+                description: Omitting credentialType selects authorizationCode. This
+                  app callback is illustrative and must be explicitly allowlisted;
+                  it is not an ID-token request.
+                value:
+                  type: googleVerification
+                  redirectUri: chefbook://oauth/google
+              vkCode:
+                summary: 'VK: authorization code'
+                description: The callback must exactly match the configured allowlist.
+                  Open the returned URL, then submit both code and state. Requires
+                  provider setup.
+                value:
+                  type: vkVerification
+                  credentialType: authorizationCode
+                  redirectUri: https://app.example.com/oauth/vk/callback
+              vkDefault:
+                summary: 'VK: default credential type'
+                description: Omitting credentialType selects authorizationCode. This
+                  app callback is illustrative and must be explicitly allowlisted;
+                  it is not an ID-token request.
+                value:
+                  type: vkVerification
+                  redirectUri: chefbook://oauth/vk
+              googleNative:
+                summary: 'Google: native ID token'
+                description: Use the returned nonce in the provider SDK. Only a nonce-bound
+                  ID token is accepted; requires an SDK that supports this flow.
+                value:
+                  type: googleVerification
+                  credentialType: idToken
+              registration:
+                summary: Collect an email for registration
+                value:
+                  type: registration
+              passwordSetup:
+                summary: Set the first password after email verification
+                value:
+                  type: passwordSetup
+      responses:
+        '201':
+          description: Create a typed authentication step
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/authentications/{id}/steps/{stepId}
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/authentication-steps.yaml#/schemas/AuthenticationStep
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/authentications/{id}/steps/{stepId}:
+    get:
+      operationId: getAuthenticationStep
+      summary: Get authentication step state
+      tags:
+        - auth
+      security:
+        - flowTokenAuth: []
+        - flowTokenAuth: []
+          bearerAuth: []
+      description: Read a step belonging to this process using Flow-Token and, for
+        sensitive purposes, the original bearer. Never replay submitted passwords/codes,
+        OAuth URL/nonce or final grants. This read sends no messages and changes no
+        state.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: stepId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Flow-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Secret of this originating flow. Bearer is additionally required
+            for reauthentication.
+      responses:
+        '200':
+          description: Read typed step state
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/authentication-steps.yaml#/schemas/AuthenticationStep
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/authentications/{id}/steps/{stepId}/completion:
+    post:
+      operationId: completeAuthenticationStep
+      summary: Complete authentication step
+      tags:
+        - auth
+      security:
+        - flowTokenAuth: []
+        - flowTokenAuth: []
+          bearerAuth: []
+      description: Complete the referenced pending step using a flat oneOf body whose
+        type matches it. 200 means successful completion of this step, not necessarily
+        the process; follow authentication.next.options. Invalid proofs return 4xx
+        and leave the step pending unless a limit is reached. Wrong type, unavailable
+        prerequisites, expired/cancelled/completed steps and replay are rejected;
+        retries never issue another grant. A terminal signUp mutation atomically rechecks
+        uniqueness, creates the account and credential, completes the process and
+        issues a one-use session grant. Completing emailVerification for an existing
+        address returns 409 account_exists only after the code was verified, ends
+        signUp without a grant and directs the client to a separate signIn or password
+        reset flow. Never overwrite credentials or bypass existing MFA. A concurrent
+        account creation at finalization follows the same verified-email conflict
+        rule. GET can recover state but never a lost grant.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: stepId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Flow-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Secret of this originating flow. Bearer is additionally required
+            for reauthentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/authentication-step-completions.yaml#/schemas/CompleteAuthenticationStepRequest
+            examples:
+              passwordEmail:
+                summary: Password sign-in using email
+                description: Send the Flow-Token for this step. Successful password
+                  verification can still require a second factor; inspect authentication.next.options.
+                value:
+                  type: passwordVerification
+                  login: alex.smith@example.com
+                  password: Example-only-Password-42!
+              passwordUsername:
+                summary: Password sign-in using username
+                description: Send the Flow-Token for this step. Successful password
+                  verification can still require a second factor; inspect authentication.next.options.
+                value:
+                  type: passwordVerification
+                  login: alexsmith
+                  password: Example-only-Password-42!
+              passwordReauthentication:
+                summary: Password reauthentication
+                description: 'Do not send login: the account comes from the original
+                  Bearer session. Send both that Bearer and the Flow-Token.'
+                value:
+                  type: passwordVerification
+                  password: Example-only-Password-42!
+              email:
+                summary: Email verification
+                description: Keep the code as a six-character string, including a
+                  leading zero. Replace it with the current code issued for this flow/factor.
+                value:
+                  type: emailVerification
+                  code: '012345'
+              totp:
+                summary: TOTP second factor
+                description: Keep the code as a six-character string, including a
+                  leading zero. Replace it with the current code issued for this flow/factor.
+                value:
+                  type: totpVerification
+                  code: '012345'
+              backupCode:
+                summary: Backup code
+                description: Replace with an unused generated backup code. A successful
+                  use consumes it.
+                value:
+                  type: backupCodeVerification
+                  code: example-unused-backup-code
+              googleIdToken:
+                summary: Google ID token
+                description: Replace with the signed token returned by the nonce-bound
+                  SDK flow. Do not also send code or state.
+                value:
+                  type: googleVerification
+                  idToken: example-provider-signed-id-token
+              googleCode:
+                summary: Google code and state
+                description: Use the code and state from this step callback. The state
+                  binds the callback to the server-held flow; do not generate it on
+                  the client.
+                value:
+                  type: googleVerification
+                  code: example-provider-code
+                  state: example-server-issued-state
+              vkCode:
+                summary: VK code and state
+                description: Use the code and state from this step callback. The state
+                  binds the callback to the server-held flow; do not generate it on
+                  the client.
+                value:
+                  type: vkVerification
+                  code: example-provider-code
+                  state: example-server-issued-state
+              discoverablePasskey:
+                summary: Discoverable passkey
+                description: 'Structural example only: send the actual assertion returned
+                  by the authenticator. All binary fields use unpadded base64url;
+                  the server verifies step, RP ID, origin, user verification and signature.'
+                value:
+                  type: passkeyVerification
+                  credential:
+                    id: ZXhhbXBsZS1jcmVkZW50aWFsLWlk
+                    rawId: ZXhhbXBsZS1jcmVkZW50aWFsLWlk
+                    type: public-key
+                    response:
+                      clientDataJSON: eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiZXhhbXBsZS1jaGFsbGVuZ2UiLCJvcmlnaW4iOiJodHRwczovL2FwcC5leGFtcGxlLmNvbSJ9
+                      authenticatorData: ZXhhbXBsZS1hdXRoZW50aWNhdG9yLWRhdGE
+                      signature: ZXhhbXBsZS1zaWduYXR1cmU
+                      userHandle: ZXhhbXBsZS1hY2NvdW50LWhhbmRsZQ
+              securityKey:
+                summary: Passkey on a security key
+                description: Illustrates nullable userHandle and an external authenticator.
+                  Use real WebAuthn bytes; these sample signatures cannot authenticate.
+                value:
+                  type: passkeyVerification
+                  credential:
+                    id: ZXhhbXBsZS1jcmVkZW50aWFsLWlk
+                    rawId: ZXhhbXBsZS1jcmVkZW50aWFsLWlk
+                    type: public-key
+                    response:
+                      clientDataJSON: eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiZXhhbXBsZS1jaGFsbGVuZ2UiLCJvcmlnaW4iOiJodHRwczovL2FwcC5leGFtcGxlLmNvbSJ9
+                      authenticatorData: ZXhhbXBsZS1hdXRoZW50aWNhdG9yLWRhdGE
+                      signature: ZXhhbXBsZS1zaWduYXR1cmU
+                      userHandle: null
+                    authenticatorAttachment: cross-platform
+                    clientExtensionResults: {}
+              registration:
+                summary: Supply only the registration email
+                description: A dot before @ is valid. No username, password or provider.
+                  Existing and unused addresses both proceed to emailVerification.
+                value:
+                  type: registration
+                  email: alex.smith@example.com
+              passwordSetup:
+                summary: Set a password after verifying the email
+                description: Synthetic password. Only for a new account with email
+                  verified in this process; never a password reset.
+                value:
+                  type: passwordSetup
+                  password: Example-only-Password-42!
+      responses:
+        '200':
+          description: Complete this step and return the updated process
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/authentication-step-completions.yaml#/schemas/CompleteAuthenticationStepResponse
+              examples:
+                emailCollected:
+                  summary: Same next step for existing and unused email
+                  value:
+                    step:
+                      id: 22222222-2222-4222-8222-222222222222
+                      type: registration
+                      status: completed
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                    authentication:
+                      id: 11111111-1111-4111-8111-111111111111
+                      purpose:
+                        type: signUp
+                      status: pending
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                      next:
+                        options:
+                          - type: emailVerification
+                      steps:
+                        - id: 22222222-2222-4222-8222-222222222222
+                          type: registration
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                emailVerified:
+                  summary: 'Verified unused email: set a password'
+                  value:
+                    step:
+                      id: 33333333-3333-4333-8333-333333333333
+                      type: emailVerification
+                      status: completed
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                      codeLength: 6
+                    authentication:
+                      id: 11111111-1111-4111-8111-111111111111
+                      purpose:
+                        type: signUp
+                      status: pending
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                      next:
+                        options:
+                          - type: passwordSetup
+                      steps:
+                        - id: 22222222-2222-4222-8222-222222222222
+                          type: registration
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                        - id: 33333333-3333-4333-8333-333333333333
+                          type: emailVerification
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                          codeLength: 6
+                  description: Illustrative policy when all listed credential types
+                    are configured. Production returns only implemented and configured
+                    alternatives.
+                accountCreated:
+                  summary: Final setup creates account; request the session separately
+                  value:
+                    step:
+                      id: 44444444-4444-4444-8444-444444444444
+                      type: passwordSetup
+                      status: completed
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                    authentication:
+                      id: 11111111-1111-4111-8111-111111111111
+                      purpose:
+                        type: signUp
+                      status: completed
+                      expirationTimestamp: '2026-09-19T12:15:00Z'
+                      next:
+                        options: []
+                      steps:
+                        - id: 22222222-2222-4222-8222-222222222222
+                          type: registration
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                        - id: 33333333-3333-4333-8333-333333333333
+                          type: emailVerification
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                          codeLength: 6
+                        - id: 44444444-4444-4444-8444-444444444444
+                          type: passwordSetup
+                          status: completed
+                          expirationTimestamp: '2026-09-19T12:15:00Z'
+                      confirmationToken: example-only-session-grant
+                      confirmationExpirationTimestamp: '2026-09-19T12:16:00Z'
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

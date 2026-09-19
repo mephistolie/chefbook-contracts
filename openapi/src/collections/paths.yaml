@@ -1,0 +1,595 @@
+paths:
+  /v1/collections:
+    get:
+      description: Get user recipe collections
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/CollectionsResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get user collections
+      tags:
+        - collection
+      operationId: getCollections
+
+    post:
+      description: Add recipes collection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/CreateCollectionRequest
+            examples:
+              private:
+                summary: Private collection
+                value:
+                  name: Weeknight dinners
+                  visibility: private
+              public:
+                summary: Public collection
+                value:
+                  name: Vegetarian favourites
+                  visibility: public
+              clientId:
+                summary: Create with an existing local ID
+                description: A client-generated UUID can preserve local identity during
+                  synchronization.
+                value:
+                  id: 11111111-1111-4111-8111-111111111111
+                  name: Local favourites
+                  visibility: private
+        description: Input
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/CollectionCreatedResponse
+          description: Created
+          headers:
+            Location:
+              description: URI of the created resource
+              schema:
+                type: string
+                format: uri-reference
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Add collection
+      tags:
+        - collection
+      x-codegen-request-body-name: input
+      operationId: addCollection
+
+  /v1/collections/{collection_id}:
+    get:
+      description: Get recipes collection
+      parameters:
+        - description: Collection ID
+          in: path
+          name: collection_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/CollectionResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get collection
+      tags:
+        - collection
+      operationId: getCollection
+
+    put:
+      description: Update recipes collection
+      parameters:
+        - description: Collection ID
+          in: path
+          name: collection_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/UpdateCollectionRequest
+            examples:
+              private:
+                summary: Private collection
+                value:
+                  name: Weeknight dinners
+                  visibility: private
+              public:
+                summary: Public collection
+                value:
+                  name: Vegetarian favourites
+                  visibility: public
+        description: Input
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Update collection
+      tags:
+        - collection
+      x-codegen-request-body-name: input
+      operationId: updateCollection
+
+    delete:
+      description: Delete recipes collection
+      parameters:
+        - description: Collection ID
+          in: path
+          name: collection_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete collection
+      tags:
+        - collection
+      operationId: deleteCollection
+
+  /v1/collections/{collection_id}/save:
+    post:
+      description: Save collection to recipe book
+      parameters:
+        - description: Collection ID
+          in: path
+          name: collection_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Save collection to recipe book
+      tags:
+        - collection
+      operationId: saveCollectionToRecipeBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SaveCollectionRequest
+            examples:
+              bookmark:
+                summary: Bookmark without contributor access
+                value: {}
+              contributor:
+                summary: Join with contributor access
+                description: Use the actual invite key for this collection.
+                value:
+                  contributorKey: example-contributor-key
+
+    delete:
+      description: Remove collection from recipe book
+      parameters:
+        - description: Collection ID
+          in: path
+          name: collection_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Remove collection from recipe book
+      tags:
+        - collection
+      operationId: removeCollectionFromRecipeBook

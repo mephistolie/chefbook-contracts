@@ -1,0 +1,116 @@
+schemas:
+  ConfirmAvatarUploadRequest:
+    type: object
+    properties:
+      avatarLink:
+        type: string
+    required:
+      - avatarLink
+
+  AvatarUploadResponse:
+    type: object
+    properties:
+      pictureLink:
+        type: string
+      uploadLink:
+        type: string
+      formData:
+        type: object
+        additionalProperties:
+          type: string
+      maxSize:
+        type: integer
+        format: int64
+    required:
+      - pictureLink
+      - uploadLink
+      - formData
+      - maxSize
+
+  ProfileSummary:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+    required:
+      - id
+
+  ProfileSummaryFields:
+    type: object
+    properties:
+      name:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+
+  ProfileIdentities:
+    type: object
+    properties:
+      googleId:
+        type: string
+        nullable: true
+      vkId:
+        type: integer
+        format: int64
+        nullable: true
+
+  ProfileResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+        nullable: true
+      email:
+        type: string
+        nullable: true
+      role:
+        type: string
+        nullable: true
+      oAuth:
+        allOf:
+          - $ref: schemas.yaml#/schemas/ProfileIdentities
+        nullable: true
+      blocked:
+        type: boolean
+      registrationTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+      displayName:
+        type: string
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      avatar:
+        type: string
+        nullable: true
+      subscriptionPlan:
+        type: string
+    required:
+      - blocked
+      - id
+
+  SetProfileDescriptionRequest:
+    type: object
+    properties:
+      description:
+        type: string
+        nullable: true
+
+  SetDisplayNameRequest:
+    type: object
+    properties:
+      displayName:
+        type: string
+        nullable: true

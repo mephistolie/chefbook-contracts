@@ -1,0 +1,120 @@
+paths:
+  /v1/oauth/google:
+    post:
+      operationId: createGoogleAuthorizationUrl
+      summary: Create a Google authorization URL
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Authenticated preparation only for identity linking; login and
+        reauthentication provider preparation use authentication steps. Bind state and allowlisted
+        redirect to originating client/session. No proof of linking permission until
+        the identity-linking request consumes an identityLink grant.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/oauth.yaml#/schemas/CreateAuthorizationUrlRequest
+            examples:
+              webCallback:
+                summary: Prepare linking using a web callback
+                description: This endpoint prepares identity linking for the authenticated
+                  Bearer session. The callback must be allowlisted; use authentication
+                  verification steps for sign-in.
+                value:
+                  redirectUri: https://app.example.com/oauth/google/callback
+              appCallback:
+                summary: Prepare linking using an app callback
+                description: 'Illustrative native callback: configure the provider
+                  and server allowlists before use. Preserve the returned state.'
+                value:
+                  redirectUri: chefbook://oauth/google
+      responses:
+        '201':
+          description: Prepare Google linking OAuth
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/oauth.yaml#/schemas/CreateAuthorizationUrlResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/oauth/vk:
+    post:
+      operationId: createVkAuthorizationUrl
+      summary: Create a VK authorization URL
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Authenticated preparation only for identity linking; login and
+        reauthentication provider preparation use authentication steps. Bind state and allowlisted
+        redirect to originating client/session. No proof of linking permission until
+        the identity-linking request consumes an identityLink grant.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/oauth.yaml#/schemas/CreateAuthorizationUrlRequest
+            examples:
+              webCallback:
+                summary: Prepare linking using a web callback
+                description: This endpoint prepares identity linking for the authenticated
+                  Bearer session. The callback must be allowlisted; use authentication
+                  verification steps for sign-in.
+                value:
+                  redirectUri: https://app.example.com/oauth/vk/callback
+              appCallback:
+                summary: Prepare linking using an app callback
+                description: 'Illustrative native callback: configure the provider
+                  and server allowlists before use. Preserve the returned state.'
+                value:
+                  redirectUri: chefbook://oauth/vk
+      responses:
+        '201':
+          description: Prepare Vk linking OAuth
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/oauth.yaml#/schemas/CreateAuthorizationUrlResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

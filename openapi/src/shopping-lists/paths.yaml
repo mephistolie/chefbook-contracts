@@ -1,0 +1,991 @@
+paths:
+  /v1/shopping-lists:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListsResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+        - shoppingList
+      operationId: getShoppingLists
+
+    post:
+      description: Create shared shopping list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/CreateShoppingListRequest
+            examples:
+              named:
+                summary: Create a named shopping list
+                value:
+                  name: Weekend groceries
+              localId:
+                summary: Sync a local shopping list
+                value:
+                  id: 11111111-1111-4111-8111-111111111111
+                  name: Weekly groceries
+        description: Params
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListCreatedResponse
+          headers:
+            Location:
+              description: URI of the created resource
+              schema:
+                type: string
+                format: uri-reference
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Create shared shopping list
+      tags:
+        - shoppingList
+      x-codegen-request-body-name: input
+      operationId: createSharedShoppingList
+
+  /v1/shopping-lists/personal:
+    get:
+      description: Get personal shopping list
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get personal shopping list
+      tags:
+        - shoppingList
+      operationId: getPersonalShoppingList
+
+  /v1/shopping-lists/{shopping_list_id}:
+    get:
+      description: Get shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get shopping list
+      tags:
+        - shoppingList
+      operationId: getShoppingList
+
+    put:
+      description: Set shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/UpdateShoppingListRequest
+            examples:
+              replace:
+                summary: Replace shopping-list contents
+                value:
+                  purchases:
+                    - id: 11111111-1111-4111-8111-111111111111
+                      name: Tomatoes
+                      amount: 400
+                      measureUnit: g
+                      purchased: false
+                      multiplier: 1
+                  lastVersion: 3
+              empty:
+                summary: Clear the shopping list
+                value:
+                  purchases: []
+                  lastVersion: 3
+        description: Shopping list
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListVersionResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set shopping list
+      tags:
+        - shoppingList
+      x-codegen-request-body-name: input
+      operationId: setShoppingList
+
+    patch:
+      description: Add new purchases to shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/UpdateShoppingListRequest
+            examples:
+              append:
+                summary: Add purchases to a shopping list
+                value:
+                  purchases:
+                    - id: 11111111-1111-4111-8111-111111111111
+                      name: Tomatoes
+                      amount: 400
+                      measureUnit: g
+                      purchased: false
+                      multiplier: 1
+                  lastVersion: 3
+              recipe:
+                summary: Add purchases linked to a recipe
+                value:
+                  purchases:
+                    - id: 11111111-1111-4111-8111-111111111111
+                      name: Tomatoes
+                      amount: 400
+                      measureUnit: g
+                      purchased: false
+                      multiplier: 2
+                      recipeId: 33333333-3333-4333-8333-333333333333
+                  lastVersion: 3
+        description: Purchases
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListVersionResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Add to shopping list
+      tags:
+        - shoppingList
+      x-codegen-request-body-name: input
+      operationId: addToShoppingList
+
+    delete:
+      description: Delete shared shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete shared shopping list
+      tags:
+        - shoppingList
+      operationId: deleteSharedShoppingList
+
+  /v1/shopping-lists/{shopping_list_id}/link:
+    get:
+      description: Get shared shopping list link
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListLinkResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get shared shopping list link
+      tags:
+        - shoppingList
+      operationId: getSharedShoppingListLink
+
+  /v1/shopping-lists/{shopping_list_id}/name:
+    put:
+      description: Set shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SetShoppingListNameRequest
+            examples:
+              rename:
+                summary: Rename the list
+                value:
+                  name: Family groceries
+              clear:
+                summary: Clear the custom name
+                value:
+                  name: null
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set shopping list
+      tags:
+        - shoppingList
+      x-codegen-request-body-name: input
+      operationId: setShoppingListName
+
+  /v1/shopping-lists/{shopping_list_id}/users:
+    get:
+      description: Get shopping list users
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ShoppingListUsersResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get shopping list users
+      tags:
+        - shoppingList
+      operationId: getShoppingListUsers
+
+    post:
+      description: Join shared shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/JoinShoppingListRequest
+            examples:
+              invite:
+                summary: Join using an invitation
+                description: Use the actual key issued for this shopping list.
+                value:
+                  key: example-shopping-list-invite-key
+        description: Key
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Join shared shopping list
+      tags:
+        - shoppingList
+      x-codegen-request-body-name: input
+      operationId: joinShoppingList
+
+  /v1/shopping-lists/{shopping_list_id}/users/{user_id}:
+    delete:
+      description: Delete user from shared shopping list
+      parameters:
+        - description: Shopping list ID
+          in: path
+          name: shopping_list_id
+          required: true
+          schema:
+            type: string
+        - description: User ID
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete user from shared shopping list
+      tags:
+        - shoppingList
+      operationId: deleteUserFromShoppingList

@@ -1,0 +1,615 @@
+schemas:
+  Contributor:
+    type: object
+    properties:
+      userId:
+        type: string
+      role:
+        type: string
+    required:
+      - userId
+      - role
+
+  CookingStep:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+        nullable: true
+      type:
+        type: string
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+      - id
+      - type
+
+  RecipeCreatedResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      version:
+        type: integer
+        format: int32
+    required:
+      - id
+      - version
+
+  CreateRecipePictureUploadLinksRequest:
+    type: object
+    properties:
+      picturesCount:
+        type: integer
+        format: int32
+    required:
+      - picturesCount
+
+  RecipeBookResponse:
+    type: object
+    properties:
+      recipes:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/RecipeState
+      tags:
+        type: object
+        additionalProperties:
+          $ref: schemas.yaml#/schemas/RecipeTag
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          $ref: ../collections/schemas.yaml#/schemas/Collection
+      isEncryptedVaultEnabled:
+        type: boolean
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummaryFields
+    required:
+      - recipes
+      - tags
+      - tagGroups
+      - collections
+      - isEncryptedVaultEnabled
+      - profilesInfo
+
+  RecipeResponse:
+    type: object
+    properties:
+      recipe:
+        $ref: schemas.yaml#/schemas/Recipe
+      collections:
+        type: object
+        additionalProperties:
+          $ref: ../collections/schemas.yaml#/schemas/CollectionSummary
+        nullable: true
+      tags:
+        type: object
+        additionalProperties:
+          $ref: schemas.yaml#/schemas/RecipeTag
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummaryFields
+    required:
+      - recipe
+      - collections
+      - tags
+      - tagGroups
+      - profilesInfo
+
+  RecipesResponse:
+    type: object
+    properties:
+      recipes:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/RecipeSummary
+      collections:
+        type: object
+        additionalProperties:
+          $ref: ../collections/schemas.yaml#/schemas/CollectionSummary
+        nullable: true
+      tags:
+        type: object
+        additionalProperties:
+          $ref: schemas.yaml#/schemas/RecipeTag
+        nullable: true
+      tagGroups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummaryFields
+    required:
+      - recipes
+      - collections
+      - tags
+      - tagGroups
+      - profilesInfo
+
+  Ingredient:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+        nullable: true
+      type:
+        type: string
+      amount:
+        type: number
+        format: float
+        nullable: true
+      unit:
+        type: string
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+      - id
+      - type
+
+  IngredientTranslation:
+    type: object
+    properties:
+      text:
+        type: string
+      unit:
+        type: string
+        nullable: true
+    required:
+      - text
+
+  Macronutrients:
+    type: object
+    properties:
+      protein:
+        type: integer
+        format: int32
+        nullable: true
+      fats:
+        type: integer
+        format: int32
+        nullable: true
+      carbohydrates:
+        type: integer
+        format: int32
+        nullable: true
+
+  RateRecipeRequest:
+    type: object
+    properties:
+      score:
+        type: integer
+        format: int32
+        nullable: true
+
+  RecipeRating:
+    type: object
+    properties:
+      index:
+        type: number
+        format: float
+      score:
+        type: integer
+        format: int32
+        nullable: true
+      votes:
+        type: integer
+        format: int32
+    required:
+      - index
+      - votes
+
+  RecipeSummary:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      owned:
+        type: boolean
+      saved:
+        type: boolean
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+      translations:
+        type: array
+        items:
+          type: string
+        nullable: true
+      preview:
+        type: string
+        nullable: true
+      creationTimestamp:
+        type: string
+        format: date-time
+      updateTimestamp:
+        type: string
+        format: date-time
+      version:
+        type: integer
+        format: int32
+      rating:
+        $ref: schemas.yaml#/schemas/RecipeRating
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+    required:
+      - id
+      - name
+      - ownerId
+      - visibility
+      - language
+      - creationTimestamp
+      - updateTimestamp
+      - version
+      - rating
+
+  SaveRecipeRequest:
+    type: object
+    properties:
+      id:
+        type: string
+        nullable: true
+      name:
+        type: string
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      version:
+        type: integer
+        format: int32
+        nullable: true
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+      macronutrients:
+        allOf:
+          - $ref: schemas.yaml#/schemas/Macronutrients
+        nullable: true
+      ingredients:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Ingredient
+        nullable: true
+      cooking:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/CookingStep
+        nullable: true
+    required:
+      - name
+      - ingredients
+      - cooking
+
+  RecipePictureUpload:
+    type: object
+    properties:
+      pictureLink:
+        type: string
+      uploadLink:
+        type: string
+      formData:
+        type: object
+        additionalProperties:
+          type: string
+      maxSize:
+        type: integer
+        format: int64
+    required:
+      - pictureLink
+      - uploadLink
+      - formData
+      - maxSize
+
+  RecipePictures:
+    type: object
+    properties:
+      preview:
+        type: string
+        nullable: true
+      cooking:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+
+  Recipe:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      owned:
+        type: boolean
+      saved:
+        type: boolean
+      visibility:
+        type: string
+      encrypted:
+        type: boolean
+      language:
+        type: string
+      translations:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+      description:
+        type: string
+        nullable: true
+      creationTimestamp:
+        type: string
+        format: date-time
+      updateTimestamp:
+        type: string
+        format: date-time
+      version:
+        type: integer
+        format: int32
+      rating:
+        $ref: schemas.yaml#/schemas/RecipeRating
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+      servings:
+        type: integer
+        format: int32
+        nullable: true
+      time:
+        type: integer
+        format: int32
+        nullable: true
+      calories:
+        type: integer
+        format: int32
+        nullable: true
+      macronutrients:
+        allOf:
+          - $ref: schemas.yaml#/schemas/Macronutrients
+        nullable: true
+      ingredients:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Ingredient
+      cooking:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/CookingStep
+      pictures:
+        allOf:
+          - $ref: schemas.yaml#/schemas/RecipePictures
+        nullable: true
+    required:
+      - id
+      - name
+      - ownerId
+      - visibility
+      - language
+      - creationTimestamp
+      - updateTimestamp
+      - version
+      - rating
+      - ingredients
+      - cooking
+
+  RecipeState:
+    type: object
+    properties:
+      id:
+        type: string
+      version:
+        type: integer
+        format: int32
+      translations:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+          nullable: true
+        nullable: true
+      rating:
+        $ref: schemas.yaml#/schemas/RecipeRating
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+      favourite:
+        type: boolean
+    required:
+      - id
+      - version
+      - rating
+
+  SetRecipeCollectionsRequest:
+    type: object
+    properties:
+      collections:
+        type: array
+        items:
+          type: string
+        nullable: true
+
+  SetRecipePicturesRequest:
+    type: object
+    properties:
+      pictures:
+        $ref: schemas.yaml#/schemas/RecipePictures
+      version:
+        type: integer
+        format: int32
+        nullable: true
+
+  RecipePicturesResponse:
+    type: object
+    properties:
+      pictures:
+        $ref: schemas.yaml#/schemas/RecipePictures
+      version:
+        type: integer
+        format: int32
+    required:
+      - pictures
+      - version
+
+  RecipeTag:
+    type: object
+    properties:
+      name:
+        type: string
+      emoji:
+        type: string
+        nullable: true
+      groupId:
+        type: string
+        nullable: true
+    required:
+      - name
+      - emoji
+      - groupId
+
+  TranslateRecipeRequest:
+    type: object
+    properties:
+      language:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+        nullable: true
+      ingredients:
+        type: object
+        additionalProperties:
+          $ref: schemas.yaml#/schemas/IngredientTranslation
+        nullable: true
+      cooking:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+    required:
+      - language
+      - name
+      - ingredients
+      - cooking
+
+  RecipeVersionResponse:
+    type: object
+    properties:
+      version:
+        type: integer
+        format: int32
+    required:
+      - version
+
+  RecipePictureUploadLinksResponse:
+    type: object
+    properties:
+      uploads:
+        items:
+          $ref: schemas.yaml#/schemas/RecipePictureUpload
+        type: array
+    required:
+      - uploads

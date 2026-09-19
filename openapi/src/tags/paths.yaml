@@ -1,0 +1,246 @@
+paths:
+  /v1/recipes/tags:
+    get:
+      description: Get recipe tags
+      parameters:
+        - description: Language code
+          in: query
+          name: language
+          schema:
+            type: string
+        - description: Tag groups
+          explode: true
+          in: query
+          name: group
+          schema:
+            items:
+              type: string
+            type: array
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/TagsResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get tags
+      tags:
+        - tag
+      operationId: getTags
+
+  /v1/recipes/tags/groups:
+    get:
+      description: Get recipe tag groups
+      parameters:
+        - description: Language code
+          in: query
+          name: language
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get tag groups
+      tags:
+        - tag
+      operationId: getTagGroups
+
+  /v1/recipes/tags/{tag_id}:
+    get:
+      description: Get recipe tag
+      parameters:
+        - description: Tag ID
+          in: path
+          name: tag_id
+          required: true
+          schema:
+            type: string
+        - description: Language code
+          in: query
+          name: language
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/TagResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get tag
+      tags:
+        - tag
+      operationId: getTag

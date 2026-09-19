@@ -1,0 +1,168 @@
+paths:
+  /v1/account/deletion:
+    post:
+      operationId: requestAccountDeletion
+      summary: Request account deletion
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Schedule account deletion using an accountDeletion grant bound
+        to the current account and session. Return the deletion deadline and deleteSharedData
+        preference; this request does not immediately delete the account.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/account.yaml#/schemas/RequestAccountDeletionRequest
+            examples:
+              preserveShared:
+                summary: Preserve shared content used by others
+                description: Send Bearer and an accountDeletion Reauthentication-Token.
+                  Eligible shared content is retained with a deleted-profile author;
+                  other owned content is removed.
+                value:
+                  deleteSharedData: false
+              deleteShared:
+                summary: Delete shared content too
+                description: Send Bearer and an accountDeletion Reauthentication-Token.
+                  Owned originals and their bookmarks are removed.
+                value:
+                  deleteSharedData: true
+              defaultPolicy:
+                summary: Use the default deletion policy
+                description: Omitting deleteSharedData means false. The same Bearer
+                  and reauthentication requirements apply.
+                value: {}
+      responses:
+        '202':
+          description: Schedule account deletion
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/account.yaml#/schemas/AccountDeletionResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    patch:
+      operationId: updateAccountDeletion
+      summary: Update account deletion preferences
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Change only deleteSharedData on an existing deletion request. Keep
+        the original deletion deadline. Requires the current access bearer; no new
+        reauthentication grant is needed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/account.yaml#/schemas/UpdateAccountDeletionRequest
+            examples:
+              preserveShared:
+                summary: Preserve shared content used by others
+                description: Send Bearer; no new reauthentication is required for
+                  an existing deletion request. The deletion deadline does not move.
+                  Eligible shared content is retained with a deleted-profile author;
+                  other owned content is removed.
+                value:
+                  deleteSharedData: false
+              deleteShared:
+                summary: Delete shared content too
+                description: Send Bearer; no new reauthentication is required for
+                  an existing deletion request. The deletion deadline does not move.
+                  Owned originals and their bookmarks are removed.
+                value:
+                  deleteSharedData: true
+      responses:
+        '200':
+          description: Change content deletion preference
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/account.yaml#/schemas/AccountDeletionResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    delete:
+      operationId: cancelAccountDeletion
+      summary: Cancel account deletion
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Cancel pending deletion using the current access bearer. Also return
+        204 when no request exists. Cancellation cannot recover an account after permanent
+        deletion.
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

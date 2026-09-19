@@ -1,0 +1,126 @@
+schemas:
+  SessionsResponse:
+    type: object
+    properties:
+      sessions:
+        items:
+          $ref: sessions.yaml#/schemas/Session
+        type: array
+    required:
+      - sessions
+
+  Session:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      client:
+        $ref: sessions.yaml#/schemas/SessionClient
+      ip:
+        type: string
+        description: Client IP observed by the server at session creation or the last
+          successful refresh.
+      lastRefreshTimestamp:
+        type: string
+        format: date-time
+        description: Timestamp of the last successful session refresh, or session
+          creation if no refresh has occurred. It does not track every API request.
+      location:
+        type: string
+        nullable: true
+        description: Approximate location derived by the server from the IP address,
+          or null when unavailable.
+    required:
+      - id
+      - client
+      - ip
+      - lastRefreshTimestamp
+      - location
+
+  RefreshSessionTokensRequest:
+    type: object
+    properties:
+      refreshToken:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - refreshToken
+
+  TokensResponse:
+    type: object
+    properties:
+      userId:
+        type: string
+        description: Stable account identifier. Login and refresh return the same
+          userId for that account.
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+      expirationTimestamp:
+        type: string
+        format: date-time
+      sessionId:
+        type: integer
+        format: int64
+        description: Session identifier. Token rotation preserves it; a new login
+          creates a new session.
+      restrictions:
+        type: array
+        items:
+          $ref: common.yaml#/schemas/AccountRestriction
+        description: Current server-enforced account restrictions. A new account exists
+          only after registration completion; no emailVerificationRequired registration
+          sessions.
+        example: []
+    required:
+      - userId
+      - accessToken
+      - refreshToken
+      - expirationTimestamp
+      - sessionId
+      - restrictions
+
+  CreateSessionRequest:
+    type: object
+    properties:
+      authenticationToken:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - authenticationToken
+    additionalProperties: false
+    description: Exchange a completed signIn/signUp grant once. No password, provider
+      proof or incomplete-registration session here.
+
+  SessionClient:
+    type: object
+    description: Client metadata displayed in the session list.
+    properties:
+      name:
+        type: string
+        nullable: true
+        description: Human-readable device or browser name, or null when unavailable.
+        example: Google Pixel 9
+      platform:
+        type: string
+        enum:
+          - android
+          - ios
+          - windows
+          - macos
+          - linux
+          - unknown
+      type:
+        type: string
+        enum:
+          - app
+          - browser
+          - unknown
+    required:
+      - name
+      - platform
+      - type

@@ -1,0 +1,84 @@
+schemas:
+  IdentitiesResponse:
+    type: object
+    properties:
+      identities:
+        type: array
+        items:
+          $ref: identities.yaml#/schemas/Identity
+    required:
+      - identities
+
+  Identity:
+    description: A linked external account. The provider determines the representation
+      of its user identifier.
+    oneOf:
+      - $ref: identities.yaml#/schemas/GoogleIdentity
+      - $ref: identities.yaml#/schemas/VkIdentity
+    discriminator:
+      propertyName: provider
+      mapping:
+        google: identities.yaml#/schemas/GoogleIdentity
+        vk: identities.yaml#/schemas/VkIdentity
+
+  GoogleIdentity:
+    type: object
+    properties:
+      provider:
+        type: string
+        enum:
+          - google
+      id:
+        type: string
+        description: Google user identifier (sub claim), not the application client
+          ID.
+    required:
+      - provider
+      - id
+
+  VkIdentity:
+    type: object
+    properties:
+      provider:
+        type: string
+        enum:
+          - vk
+      id:
+        type: integer
+        format: int64
+        description: VK user identifier, not the application ID.
+    required:
+      - provider
+      - id
+
+  LinkGoogleIdentityRequest:
+    type: object
+    properties:
+      code:
+        type: string
+        minLength: 1
+        writeOnly: true
+      state:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - code
+      - state
+    additionalProperties: false
+    description: Code/state from this session's POST /oauth/google. Native ID-token
+      login uses an authentication challenge; an unbound ID token cannot link an identity.
+
+  LinkVkIdentityRequest:
+    type: object
+    properties:
+      code:
+        type: string
+        minLength: 1
+      state:
+        type: string
+        minLength: 1
+    required:
+      - code
+      - state
+    additionalProperties: false

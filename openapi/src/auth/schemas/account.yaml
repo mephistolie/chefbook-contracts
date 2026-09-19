@@ -1,0 +1,40 @@
+schemas:
+  RequestAccountDeletionRequest:
+    type: object
+    properties:
+      deleteSharedData:
+        type: boolean
+        default: false
+        description: Whether to delete all recipes and collections owned by this account,
+          including those used by other users. If false or omitted, preserve non-private
+          recipes bookmarked by other users and owned collections used by others;
+          delete the remaining owned recipes and collections. Bookmarks reference
+          originals, not independent copies. Deleting an original removes its bookmarks.
+          Other users' recipes are not deleted. Preserved recipes display a deleted-profile
+          author. Collection ownership after account deletion requires a separate
+          policy before implementation.
+    additionalProperties: false
+
+  AccountDeletionResponse:
+    type: object
+    properties:
+      deletionTimestamp:
+        type: string
+        format: date-time
+      deleteSharedData:
+        type: boolean
+        description: The content deletion policy stored in this account deletion request.
+    required:
+      - deletionTimestamp
+      - deleteSharedData
+
+  UpdateAccountDeletionRequest:
+    type: object
+    properties:
+      deleteSharedData:
+        type: boolean
+        description: Replace the stored content deletion policy without changing the
+          deletion deadline.
+    required:
+      - deleteSharedData
+    additionalProperties: false

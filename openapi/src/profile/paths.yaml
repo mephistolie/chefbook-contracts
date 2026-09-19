@@ -1,0 +1,544 @@
+paths:
+  /v1/profile:
+    get:
+      description: Get profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ProfileResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get profile
+      tags:
+        - profile
+      operationId: getProfile
+
+  /v1/profile/avatar:
+    post:
+      description: Generate signed upload form data and the resulting picture link.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/AvatarUploadResponse
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Generate avatar upload link
+      tags:
+        - profile
+      operationId: generateAvatarUploadLink
+
+    put:
+      description: Confirm avatar uploading
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/ConfirmAvatarUploadRequest
+            examples:
+              uploaded:
+                summary: Confirm uploaded avatar
+                description: Use the avatarLink returned by generateAvatarUploadLink
+                  after the upload succeeds.
+                value:
+                  avatarLink: example-avatar-object
+        description: Avatar ID
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Confirm avatar uploading
+      tags:
+        - profile
+      x-codegen-request-body-name: input
+      operationId: confirmAvatarUploading
+
+    delete:
+      description: Delete avatar
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Delete avatar
+      tags:
+        - profile
+      operationId: deleteAvatar
+
+  /v1/profile/description:
+    put:
+      description: Set profile description
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SetProfileDescriptionRequest
+            examples:
+              set:
+                summary: Set description
+                value:
+                  description: Home cook, sharing simple recipes.
+              clear:
+                summary: Clear description
+                value:
+                  description: null
+        description: Description
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set description
+      tags:
+        - profile
+      x-codegen-request-body-name: input
+      operationId: setDescription
+
+  /v1/profile/display-name:
+    put:
+      description: Set profile name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: schemas.yaml#/schemas/SetDisplayNameRequest
+            examples:
+              set:
+                summary: Set displayName
+                value:
+                  displayName: Alex Smith
+              clear:
+                summary: Clear displayName
+                value:
+                  displayName: null
+        description: Name
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/MessageResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Set name
+      tags:
+        - profile
+      x-codegen-request-body-name: input
+      operationId: setDisplayName
+
+  /v1/profiles/{profile_id}:
+    get:
+      description: Get profile by ID or username
+      parameters:
+        - description: Profile ID or username
+          in: path
+          name: profile_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: schemas.yaml#/schemas/ProfileResponse
+          description: OK
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Bad Request
+
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Unauthorized
+
+        '403':
+          description: Forbidden An authenticated session with emailVerificationRequired
+            cannot use this operation; return email_verification_required. Enforce
+            the current account state on the server, independently of the token response
+            snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+              examples:
+                emailVerificationRequired:
+                  value:
+                    error: email_verification_required
+                    message: Verify your email to perform this operation.
+
+        '404':
+          description: Referenced resource not found
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '409':
+          description: Conflict with current resource state, version, or account deletion
+            state
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+          description: Internal Server Error
+
+        '503':
+          description: Upstream service unavailable; retry later
+          content:
+            application/json:
+              schema:
+                $ref: ../common/schemas.yaml#/schemas/ErrorResponse
+      security:
+        - bearerAuth: []
+      summary: Get profile by ID
+      tags:
+        - profile
+      operationId: getPublicProfile

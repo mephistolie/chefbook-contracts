@@ -1,0 +1,244 @@
+schemas:
+  AuthenticationPurpose:
+    oneOf:
+      - $ref: authentications.yaml#/schemas/SignInPurpose
+      - $ref: authentications.yaml#/schemas/SignUpPurpose
+      - $ref: authentications.yaml#/schemas/PasswordChangePurpose
+      - $ref: authentications.yaml#/schemas/EmailChangePurpose
+      - $ref: authentications.yaml#/schemas/AccountDeletionPurpose
+      - $ref: authentications.yaml#/schemas/TotpEnrollmentPurpose
+      - $ref: authentications.yaml#/schemas/TotpRemovalPurpose
+      - $ref: authentications.yaml#/schemas/PasskeyEnrollmentPurpose
+      - $ref: authentications.yaml#/schemas/PasskeyRemovalPurpose
+      - $ref: authentications.yaml#/schemas/BackupCodesRotationPurpose
+      - $ref: authentications.yaml#/schemas/IdentityLinkPurpose
+      - $ref: authentications.yaml#/schemas/IdentityUnlinkPurpose
+    discriminator:
+      propertyName: type
+      mapping:
+        signIn: authentications.yaml#/schemas/SignInPurpose
+        signUp: authentications.yaml#/schemas/SignUpPurpose
+        passwordChange: authentications.yaml#/schemas/PasswordChangePurpose
+        emailChange: authentications.yaml#/schemas/EmailChangePurpose
+        accountDeletion: authentications.yaml#/schemas/AccountDeletionPurpose
+        totpEnrollment: authentications.yaml#/schemas/TotpEnrollmentPurpose
+        totpRemoval: authentications.yaml#/schemas/TotpRemovalPurpose
+        passkeyEnrollment: authentications.yaml#/schemas/PasskeyEnrollmentPurpose
+        passkeyRemoval: authentications.yaml#/schemas/PasskeyRemovalPurpose
+        backupCodesRotation: authentications.yaml#/schemas/BackupCodesRotationPurpose
+        identityLink: authentications.yaml#/schemas/IdentityLinkPurpose
+        identityUnlink: authentications.yaml#/schemas/IdentityUnlinkPurpose
+
+  SignInPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - signIn
+    required:
+      - type
+    additionalProperties: false
+
+  SignUpPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - signUp
+    required:
+      - type
+    additionalProperties: false
+
+  PasswordChangePurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passwordChange
+    required:
+      - type
+    additionalProperties: false
+
+  EmailChangePurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - emailChange
+    required:
+      - type
+    additionalProperties: false
+
+  AccountDeletionPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - accountDeletion
+    required:
+      - type
+    additionalProperties: false
+
+  TotpEnrollmentPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - totpEnrollment
+    required:
+      - type
+    additionalProperties: false
+
+  TotpRemovalPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - totpRemoval
+    required:
+      - type
+    additionalProperties: false
+
+  PasskeyEnrollmentPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passkeyEnrollment
+    required:
+      - type
+    additionalProperties: false
+
+  PasskeyRemovalPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passkeyRemoval
+    required:
+      - type
+    additionalProperties: false
+
+  BackupCodesRotationPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - backupCodesRotation
+    required:
+      - type
+    additionalProperties: false
+
+  IdentityLinkPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - identityLink
+    required:
+      - type
+    additionalProperties: false
+
+  IdentityUnlinkPurpose:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - identityUnlink
+    required:
+      - type
+    additionalProperties: false
+
+  StartAuthenticationRequest:
+    type: object
+    properties:
+      purpose:
+        $ref: authentications.yaml#/schemas/AuthenticationPurpose
+    required:
+      - purpose
+    additionalProperties: false
+    description: Start only the process. Registration data and credentials are supplied
+      through typed steps, never here. signIn/signUp are public; all other purposes
+      require the originating access bearer. No client/device fields.
+
+  AuthenticationResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      purpose:
+        $ref: authentications.yaml#/schemas/AuthenticationPurpose
+      status:
+        type: string
+        enum:
+          - pending
+          - completed
+          - failed
+          - cancelled
+      expirationTimestamp:
+        type: string
+        format: date-time
+      next:
+        $ref: authentications.yaml#/schemas/AuthenticationNext
+      flowToken:
+        type: string
+        minLength: 1
+        description: Returned only by creation, never GET. Keep in the initiating
+          flow; do not log or persist in general app state.
+      confirmationToken:
+        type: string
+        minLength: 1
+        description: Single-use grant returned only by the mutation completing the
+          process. GET never returns it.
+      confirmationExpirationTimestamp:
+        type: string
+        format: date-time
+      steps:
+        type: array
+        items:
+          $ref: authentication-steps.yaml#/schemas/AuthenticationStep
+        description: Created steps in creation order; empty at process creation. Read-safe
+          representations never repeat OAuth URLs/nonces, submitted secrets or final
+          grants.
+    required:
+      - id
+      - purpose
+      - status
+      - expirationTimestamp
+      - next
+      - steps
+    additionalProperties: false
+    description: The server controls transitions. next.options lists alternatives
+      for the next action, not all mandatory factors. Completing a data-collection
+      or setup step is not authentication evidence. Terminal processes have empty
+      options. Tokens for a session are obtained separately with POST /v1/sessions.
+
+  AuthenticationNext:
+    type: object
+    properties:
+      options:
+        type: array
+        items:
+          $ref: authentication-steps.yaml#/schemas/AuthenticationStepOption
+    required:
+      - options
+    additionalProperties: false
+    description: Server-advertised alternative step types. Empty after termination.
+      A pending emailVerification may be offered again for resend. Before email ownership
+      is proved, signUp responses and options must be independent of account existence.
+      For signIn, do not reveal account-specific factors before a successful first
+      proof. Unsupported or unconfigured types are never offered; unknown types require
+      a client update, never skipping the step.

@@ -1,0 +1,97 @@
+schemas:
+  CreateCollectionRequest:
+    type: object
+    properties:
+      id:
+        type: string
+        nullable: true
+      name:
+        type: string
+      visibility:
+        type: string
+    required:
+      - name
+
+  CollectionCreatedResponse:
+    type: object
+    properties:
+      id:
+        type: string
+    required:
+      - id
+
+  CollectionSummary:
+    type: object
+    properties:
+      name:
+        type: string
+    required:
+      - name
+
+  Collection:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      visibility:
+        type: string
+      contributors:
+        type: array
+        items:
+          $ref: ../recipes/schemas.yaml#/schemas/Contributor
+      recipesCount:
+        type: integer
+        format: int32
+    required:
+      - id
+      - name
+      - visibility
+      - contributors
+      - recipesCount
+
+  CollectionResponse:
+    type: object
+    properties:
+      collection:
+        $ref: schemas.yaml#/schemas/Collection
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummaryFields
+    required:
+      - collection
+      - profilesInfo
+
+  CollectionsResponse:
+    type: object
+    properties:
+      collections:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Collection
+      profilesInfo:
+        type: object
+        additionalProperties:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummaryFields
+    required:
+      - collections
+      - profilesInfo
+
+  SaveCollectionRequest:
+    type: object
+    properties:
+      contributorKey:
+        type: string
+        nullable: true
+
+  UpdateCollectionRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      visibility:
+        type: string
+    required:
+      - name

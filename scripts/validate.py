@@ -8,6 +8,8 @@ import subprocess
 import sys
 import tempfile
 import urllib.request
+import yaml
+from request_examples import validate_request_examples
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = "7.14.0"
@@ -24,6 +26,8 @@ def verified(path):
 
 def main():
     subprocess.run([sys.executable, str(ROOT / "scripts/bundle.py"), "--check"], check=True)
+    examples = validate_request_examples(yaml.safe_load((ROOT / "openapi/chefbook.yaml").read_text()))
+    print(f'Validated {examples} named JSON request examples', flush=True)
     override = os.environ.get("OPENAPI_GENERATOR_JAR")
     jar = Path(override) if override else ROOT / ".cache" / f"openapi-generator-{VERSION}.jar"
     if override and not verified(jar):
@@ -41,11 +45,12 @@ def main():
             download.replace(jar)
         finally:
             download.unlink(missing_ok=True)
-    for specification in ("openapi/src/chefbook.yaml", "openapi/chefbook.yaml"):
-        subprocess.run(
-            ["java", "-jar", str(jar), "validate", "-i", str(ROOT / specification)],
-            check=True,
-        )
+    # The source is a bundler manifest with x-path-sources, not a standalone spec.
+    # bundle.py --check above resolves and checks the sources before validation.
+    subprocess.run(
+        ["java", "-jar", str(jar), "validate", "-i", str(ROOT / "openapi/chefbook.yaml")],
+        check=True,
+    )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,367 @@
+schemas:
+  PasskeysResponse:
+    type: object
+    properties:
+      passkeys:
+        type: array
+        items:
+          $ref: passkeys.yaml#/schemas/Passkey
+    required:
+      - passkeys
+    additionalProperties: false
+
+  Passkey:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        minLength: 1
+        maxLength: 100
+      creationTimestamp:
+        type: string
+        format: date-time
+      lastUseTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+      transports:
+        type: array
+        items:
+          type: string
+      backupEligible:
+        type: boolean
+      backupState:
+        type: boolean
+    required:
+      - id
+      - name
+      - creationTimestamp
+      - lastUseTimestamp
+      - transports
+      - backupEligible
+      - backupState
+    additionalProperties: false
+
+  RenamePasskeyRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+        maxLength: 100
+    required:
+      - name
+    additionalProperties: false
+
+  RequestPasskeyRegistrationResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        format: uuid
+      expirationTimestamp:
+        type: string
+        format: date-time
+      publicKey:
+        $ref: passkeys.yaml#/schemas/PasskeyCreationOptions
+    required:
+      - requestId
+      - expirationTimestamp
+      - publicKey
+    additionalProperties: false
+
+  ConfirmPasskeyRegistrationRequest:
+    type: object
+    properties:
+      requestId:
+        type: string
+        format: uuid
+      name:
+        type: string
+        minLength: 1
+        maxLength: 100
+      credential:
+        $ref: passkeys.yaml#/schemas/PasskeyAttestation
+    required:
+      - requestId
+      - name
+      - credential
+    additionalProperties: false
+
+  PasskeyCredentialDescriptor:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - public-key
+      id:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      transports:
+        type: array
+        items:
+          type: string
+    required:
+      - type
+      - id
+    additionalProperties: false
+
+  PasskeyRequestOptions:
+    type: object
+    properties:
+      challenge:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      rpId:
+        type: string
+        minLength: 1
+      timeout:
+        type: integer
+        minimum: 1
+      userVerification:
+        type: string
+        enum:
+          - required
+      allowCredentials:
+        type: array
+        items:
+          $ref: passkeys.yaml#/schemas/PasskeyCredentialDescriptor
+    required:
+      - challenge
+      - rpId
+      - userVerification
+    additionalProperties: false
+    description: WebAuthn PublicKeyCredentialRequestOptionsJSON. Empty/absent allowCredentials
+      enables discoverable credentials. Account selection must not leak before proof.
+
+  PasskeyCreationOptions:
+    type: object
+    properties:
+      rp:
+        $ref: passkeys.yaml#/schemas/PasskeyRelyingParty
+      user:
+        $ref: passkeys.yaml#/schemas/PasskeyUser
+      challenge:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      pubKeyCredParams:
+        type: array
+        items:
+          $ref: passkeys.yaml#/schemas/PasskeyAlgorithm
+      timeout:
+        type: integer
+        minimum: 1
+      excludeCredentials:
+        type: array
+        items:
+          $ref: passkeys.yaml#/schemas/PasskeyCredentialDescriptor
+      authenticatorSelection:
+        $ref: passkeys.yaml#/schemas/PasskeyAuthenticatorSelection
+      attestation:
+        type: string
+        enum:
+          - none
+    required:
+      - rp
+      - user
+      - challenge
+      - pubKeyCredParams
+      - authenticatorSelection
+      - attestation
+    additionalProperties: false
+
+  PasskeyRelyingParty:
+    type: object
+    properties:
+      id:
+        type: string
+        minLength: 1
+      name:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - name
+    additionalProperties: false
+
+  PasskeyUser:
+    type: object
+    properties:
+      id:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      name:
+        type: string
+        minLength: 1
+      displayName:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - name
+      - displayName
+    additionalProperties: false
+    description: id is the binary immutable account UUID encoded as base64url, never
+      email. Passkeys can only be registered for an existing account after signUp
+      is complete. Preserve the account UUID across schema changes.
+
+  PasskeyAlgorithm:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - public-key
+      alg:
+        type: integer
+        description: COSE algorithm identifier accepted by the server.
+    required:
+      - type
+      - alg
+    additionalProperties: false
+
+  PasskeyAuthenticatorSelection:
+    type: object
+    properties:
+      residentKey:
+        type: string
+        enum:
+          - required
+      userVerification:
+        type: string
+        enum:
+          - required
+    required:
+      - residentKey
+      - userVerification
+    additionalProperties: false
+
+  PasskeyAssertion:
+    type: object
+    properties:
+      id:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      rawId:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      type:
+        type: string
+        enum:
+          - public-key
+      response:
+        $ref: passkeys.yaml#/schemas/PasskeyAssertionResponse
+      authenticatorAttachment:
+        type: string
+        enum:
+          - platform
+          - cross-platform
+      clientExtensionResults:
+        type: object
+        additionalProperties: true
+        description: WebAuthn standard extension outputs. These are not arbitrary
+          authentication context or trusted claims.
+    required:
+      - id
+      - rawId
+      - type
+      - response
+    additionalProperties: false
+
+  PasskeyAssertionResponse:
+    type: object
+    properties:
+      clientDataJSON:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      authenticatorData:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      signature:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      userHandle:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+        nullable: true
+    required:
+      - clientDataJSON
+      - authenticatorData
+      - signature
+    additionalProperties: false
+
+  PasskeyAttestation:
+    type: object
+    properties:
+      id:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      rawId:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      type:
+        type: string
+        enum:
+          - public-key
+      response:
+        $ref: passkeys.yaml#/schemas/PasskeyAttestationResponse
+      authenticatorAttachment:
+        type: string
+        enum:
+          - platform
+          - cross-platform
+      clientExtensionResults:
+        type: object
+        additionalProperties: true
+    required:
+      - id
+      - rawId
+      - type
+      - response
+    additionalProperties: false
+
+  PasskeyAttestationResponse:
+    type: object
+    properties:
+      clientDataJSON:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      attestationObject:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      transports:
+        type: array
+        items:
+          type: string
+      publicKeyAlgorithm:
+        type: integer
+      publicKey:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+      authenticatorData:
+        type: string
+        pattern: ^[A-Za-z0-9_-]+$
+        description: Unpadded base64url bytes; not standard base64.
+    required:
+      - clientDataJSON
+      - attestationObject
+    additionalProperties: false

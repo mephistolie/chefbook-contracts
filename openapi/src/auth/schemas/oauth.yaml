@@ -1,0 +1,27 @@
+schemas:
+  CreateAuthorizationUrlRequest:
+    type: object
+    properties:
+      redirectUri:
+        type: string
+        format: uri
+    required:
+      - redirectUri
+    additionalProperties: false
+    description: Exact allowlisted callback URI. Browser/client flow binding is enforced
+      by the server; arbitrary redirect URIs are rejected. This operation only prepares
+      linking for the authenticated session.
+
+  CreateAuthorizationUrlResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: uri
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - url
+      - expirationTimestamp
+    additionalProperties: false

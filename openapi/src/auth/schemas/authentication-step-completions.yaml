@@ -1,0 +1,228 @@
+schemas:
+  CompleteAuthenticationStepRequest:
+    oneOf:
+      - $ref: authentication-step-completions.yaml#/schemas/RegistrationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/PasswordSetupStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/PasswordVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/EmailVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/TotpVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/BackupCodeVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/GoogleVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/VkVerificationStepCompletion
+      - $ref: authentication-step-completions.yaml#/schemas/PasskeyVerificationStepCompletion
+    discriminator:
+      propertyName: type
+      mapping:
+        registration: authentication-step-completions.yaml#/schemas/RegistrationStepCompletion
+        passwordSetup: authentication-step-completions.yaml#/schemas/PasswordSetupStepCompletion
+        passwordVerification: authentication-step-completions.yaml#/schemas/PasswordVerificationStepCompletion
+        emailVerification: authentication-step-completions.yaml#/schemas/EmailVerificationStepCompletion
+        totpVerification: authentication-step-completions.yaml#/schemas/TotpVerificationStepCompletion
+        backupCodeVerification: authentication-step-completions.yaml#/schemas/BackupCodeVerificationStepCompletion
+        googleVerification: authentication-step-completions.yaml#/schemas/GoogleVerificationStepCompletion
+        vkVerification: authentication-step-completions.yaml#/schemas/VkVerificationStepCompletion
+        passkeyVerification: authentication-step-completions.yaml#/schemas/PasskeyVerificationStepCompletion
+    description: Flat typed input. type must match the referenced pending step; no
+      data/registration/authentication wrapper. Credentials and proofs are write-only.
+      The server also enforces purpose, prerequisites and the selected OAuth mode.
+
+  PasswordVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passwordVerification
+      password:
+        type: string
+        minLength: 1
+        writeOnly: true
+      login:
+        type: string
+        minLength: 1
+    required:
+      - type
+      - password
+    additionalProperties: false
+    description: 'signIn requires login (email or username). Reauthentication forbids
+      login: account comes from the originating session. Login is not persisted as
+      authentication context.'
+
+  EmailVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - emailVerification
+      code:
+        type: string
+        minLength: 6
+        writeOnly: true
+        pattern: ^[0-9]{6}$
+        maxLength: 6
+    required:
+      - type
+      - code
+    additionalProperties: false
+
+  TotpVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - totpVerification
+      code:
+        type: string
+        minLength: 6
+        writeOnly: true
+        pattern: ^[0-9]{6}$
+        maxLength: 6
+    required:
+      - type
+      - code
+    additionalProperties: false
+
+  BackupCodeVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - backupCodeVerification
+      code:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - type
+      - code
+    additionalProperties: false
+
+  GoogleVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - googleVerification
+      idToken:
+        type: string
+        minLength: 1
+        writeOnly: true
+      code:
+        type: string
+        minLength: 1
+        writeOnly: true
+      state:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - type
+    additionalProperties: false
+    oneOf:
+      - required:
+          - idToken
+        not:
+          anyOf:
+            - required:
+                - code
+            - required:
+                - state
+      - required:
+          - code
+          - state
+        not:
+          required:
+            - idToken
+
+  VkVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - vkVerification
+      code:
+        type: string
+        minLength: 1
+        writeOnly: true
+      state:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - type
+      - code
+      - state
+    additionalProperties: false
+
+  PasskeyVerificationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passkeyVerification
+      credential:
+        $ref: passkeys.yaml#/schemas/PasskeyAssertion
+    required:
+      - type
+      - credential
+    additionalProperties: false
+
+  RegistrationStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - registration
+      email:
+        type: string
+        format: email
+    required:
+      - type
+      - email
+    additionalProperties: false
+    description: Email only. Username is selected after account creation through authorized
+      account endpoints. Returns the same emailVerification next option for an existing
+      or unused email; never accepts a password or provider choice.
+
+  PasswordSetupStepCompletion:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - passwordSetup
+      password:
+        type: string
+        minLength: 1
+        writeOnly: true
+    required:
+      - type
+      - password
+    additionalProperties: false
+    description: Hash only after verifying the process, prerequisites and email ownership.
+      No password setup before email verification. Final account creation rechecks
+      email uniqueness atomically; never overwrites an existing account.
+
+  CompleteAuthenticationStepResponse:
+    type: object
+    properties:
+      step:
+        $ref: authentication-steps.yaml#/schemas/AuthenticationStep
+      authentication:
+        $ref: authentications.yaml#/schemas/AuthenticationResponse
+    required:
+      - step
+      - authentication
+    additionalProperties: false
+    description: Updated step and process. 200 means this step completed successfully;
+      next.options may require more work. A final successful mutation alone returns
+      the one-use confirmationToken. Invalid input returns a 4xx without completing
+      the step; it counts toward applicable limits. Completed steps cannot be replayed
+      to mint credentials or grants.

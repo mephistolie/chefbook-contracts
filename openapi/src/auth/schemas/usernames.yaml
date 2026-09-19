@@ -1,0 +1,16 @@
+schemas:
+  SetUsernameRequest:
+    type: object
+    properties:
+      username:
+        type: string
+    required:
+      - username
+
+  UsernameAvailabilityResponse:
+    type: object
+    properties:
+      available:
+        type: boolean
+    required:
+      - available

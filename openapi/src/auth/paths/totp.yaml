@@ -1,0 +1,183 @@
+paths:
+  /v1/account/totp:
+    get:
+      operationId: getTotpStatus
+      summary: Get TOTP status
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Read TOTP status
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/totp.yaml#/schemas/TotpStatusResponse
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    post:
+      operationId: requestTotpActivation
+      summary: Request TOTP activation
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Prepare a pending TOTP secret and provisioning URI after reauthentication
+        for totpEnrollment. TOTP is not enabled until its first code is confirmed
+        from the same session.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      responses:
+        '201':
+          description: Prepare TOTP activation
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+            Location:
+              required: true
+              description: /v1/account/totp
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/totp.yaml#/schemas/RequestTotpActivationResponse
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+    delete:
+      operationId: deleteTotp
+      summary: Delete TOTP configuration
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+          reauthenticationAuth: []
+      description: Remove the active TOTP secret and configuration using a totpRemoval
+        grant from the same session. This is not a temporary pause; enabling TOTP
+        again requires a new activation.
+      parameters:
+        - name: Reauthentication-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Single-use confirmation token for this action, bound to the
+            current account and access session.
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable
+
+  /v1/account/totp/confirmation:
+    post:
+      operationId: confirmTotpActivation
+      summary: Confirm TOTP activation
+      tags:
+        - auth
+      security:
+        - bearerAuth: []
+      description: Verify a code from the pending secret, enable TOTP and return newly
+        generated backup codes. Store the backup codes now; subsequent reads return
+        only their status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/totp.yaml#/schemas/ConfirmTotpActivationRequest
+            examples:
+              activate:
+                summary: Activate TOTP and receive backup codes
+                description: Use a code computed from the pending activation secret.
+                  Bearer is required; store the returned backup codes because their
+                  plaintext is shown only on generation.
+                value:
+                  code: '012345'
+      responses:
+        '200':
+          description: Activate TOTP with first code
+          headers:
+            Cache-Control:
+              $ref: ../../chefbook.yaml#/components/headers/CacheControlNoStore
+            Pragma:
+              $ref: ../../chefbook.yaml#/components/headers/PragmaNoCache
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/backup-codes.yaml#/schemas/BackupCodesResponse
+
+        '400':
+          $ref: ../../chefbook.yaml#/components/responses/BadRequest
+
+        '401':
+          $ref: ../../chefbook.yaml#/components/responses/Unauthorized
+
+        '403':
+          $ref: ../../chefbook.yaml#/components/responses/Forbidden
+
+        '404':
+          $ref: ../../chefbook.yaml#/components/responses/NotFound
+
+        '409':
+          $ref: ../../chefbook.yaml#/components/responses/Conflict
+
+        '429':
+          $ref: ../../chefbook.yaml#/components/responses/TooManyRequests
+
+        '503':
+          $ref: ../../chefbook.yaml#/components/responses/ServiceUnavailable

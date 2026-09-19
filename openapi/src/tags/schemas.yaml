@@ -1,0 +1,53 @@
+schemas:
+  Tag:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      emoji:
+        type: string
+        nullable: true
+      groupId:
+        type: string
+        nullable: true
+    required:
+      - id
+      - name
+
+  TagResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      emoji:
+        type: string
+        nullable: true
+      groupId:
+        type: string
+        nullable: true
+      groupName:
+        type: string
+        nullable: true
+    required:
+      - id
+      - name
+
+  TagsResponse:
+    type: object
+    properties:
+      tags:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Tag
+        nullable: true
+      groups:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+    required:
+      - tags

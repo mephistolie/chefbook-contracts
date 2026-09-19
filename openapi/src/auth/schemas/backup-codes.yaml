@@ -1,0 +1,33 @@
+schemas:
+  BackupCodesStatusResponse:
+    type: object
+    properties:
+      remainingCount:
+        type: integer
+        minimum: 0
+      generationTimestamp:
+        type: string
+        format: date-time
+        nullable: true
+    required:
+      - remainingCount
+      - generationTimestamp
+    additionalProperties: false
+
+  BackupCodesResponse:
+    type: object
+    properties:
+      backupCodes:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      generationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - backupCodes
+      - generationTimestamp
+    additionalProperties: false
+    description: Plaintext codes shown once. Replaces the entire previous set atomically.
+      Codes are second-factor recovery, not a primary sign-in credential.

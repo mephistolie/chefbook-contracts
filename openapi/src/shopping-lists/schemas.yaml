@@ -1,0 +1,165 @@
+schemas:
+  CreateShoppingListRequest:
+    type: object
+    properties:
+      id:
+        type: string
+        nullable: true
+      name:
+        type: string
+        nullable: true
+
+  ShoppingListCreatedResponse:
+    type: object
+    properties:
+      id:
+        type: string
+    required:
+      - id
+
+  ShoppingListResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        nullable: true
+      type:
+        type: string
+      owner:
+        $ref: ../profile/schemas.yaml#/schemas/ProfileSummary
+      purchases:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Purchase
+      recipeNames:
+        type: object
+        additionalProperties:
+          type: string
+        nullable: true
+      version:
+        type: integer
+        format: int32
+    required:
+      - id
+      - type
+      - owner
+      - purchases
+      - recipeNames
+      - version
+
+  ShoppingListLinkResponse:
+    type: object
+    properties:
+      link:
+        type: string
+      expirationTimestamp:
+        type: string
+        format: date-time
+    required:
+      - link
+      - expirationTimestamp
+
+  JoinShoppingListRequest:
+    type: object
+    properties:
+      key:
+        type: string
+
+  Purchase:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      multiplier:
+        type: integer
+        format: int32
+        nullable: true
+      purchased:
+        type: boolean
+      amount:
+        type: number
+        format: float
+        nullable: true
+      measureUnit:
+        type: string
+        nullable: true
+      recipeId:
+        type: string
+        nullable: true
+    required:
+      - id
+      - name
+
+  SetShoppingListNameRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        nullable: true
+
+  UpdateShoppingListRequest:
+    type: object
+    properties:
+      purchases:
+        type: array
+        items:
+          $ref: schemas.yaml#/schemas/Purchase
+        nullable: true
+      lastVersion:
+        type: integer
+        format: int32
+        nullable: true
+
+  ShoppingListVersionResponse:
+    type: object
+    properties:
+      version:
+        type: integer
+        format: int32
+    required:
+      - version
+
+  ShoppingListSummary:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        nullable: true
+      type:
+        type: string
+      owner:
+        $ref: ../profile/schemas.yaml#/schemas/ProfileSummary
+      version:
+        type: integer
+        format: int32
+    required:
+      - id
+      - type
+      - owner
+      - version
+
+  ShoppingListsResponse:
+    type: object
+    properties:
+      shoppingLists:
+        items:
+          $ref: schemas.yaml#/schemas/ShoppingListSummary
+        type: array
+    required:
+      - shoppingLists
+
+  ShoppingListUsersResponse:
+    type: object
+    properties:
+      users:
+        items:
+          $ref: ../profile/schemas.yaml#/schemas/ProfileSummary
+        type: array
+    required:
+      - users

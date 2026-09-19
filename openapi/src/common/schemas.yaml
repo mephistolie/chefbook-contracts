@@ -1,4 +1,3 @@
-paths: {}
 schemas:
   ErrorResponse:
     properties:
@@ -7,17 +6,19 @@ schemas:
       message:
         type: string
     type: object
+
   LinkResponse:
     type: object
     properties:
       link:
         type: string
     required:
-    - link
+      - link
+
   MessageResponse:
     type: object
     properties:
       message:
         type: string
     required:
-    - message
+      - message
